@@ -1,48 +1,49 @@
 :root {
     --iconsSize: 70px;
     --iconImgSize: 45px;
-    --menu_btn: 40px;
+    --menu_btn: 50px;
 }
 
 .sidebar{
     background-color: white;
+    width: initial;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: flex-start; */
     padding: 10px;
 }
 
-.menubtn_cont{
+.sidebar.active{
+    width: 500px;
+    /* align-items:flex-start; */
+}
+
+.menu_btn {
+    background: none;
+    cursor: pointer;
+    border: none;
     width: var(--menu_btn);
     height: var(--menu_btn);
-    padding: 10px 0;
+    margin: 10px 5px;
 }
 
-#menu_toggle{
-    opacity: 0;
-}
-
-#menu_toggle:checked + .menu_btn > span{
+.menu_btn.active > span{
     transform: rotate(45deg);
 }
 
-#menu_toggle:checked + .menu_btn > span::before{
+.menu_btn.active > span::before{
     top: 0;
     transform: rotate(0deg);
 }
 
-#menu_toggle:checked + .menu_btn > span::after{
+.menu_btn.active > span::after{
     top: 0;
     transform: rotate(90deg);
 }
 
-#menu_toggle:checked ~ .menu{
+.menu_btn.active ~ .menu{
     left: 0 !important;
-}
-
-.menu_btn{
-    cursor: pointer;
 }
 
 .sidebar .menu_btn > span,
@@ -50,7 +51,8 @@
 .sidebar .menu_btn > span::after {
     display: block;
     position: absolute;
-    width: var(--menu_btn);
+    width: inherit;
+    margin: 0;
     height: 3px;
     border-radius: 15px;
     background-color: var(--gray1);
@@ -74,13 +76,52 @@
 }
 
 .sidebar li{
-    padding: 10px 0;
+    padding: 5px 5px;
+    margin: 10px 0;
     display: flex;
     flex-direction: row;
+    align-items: center;
+}
+
+.sidebar li:has(.homeIcon.active){
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
+}
+
+.sidebar li:has(.mhIcon.active){
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
+}
+
+.sidebar li:has(.scheduleIcon.active){
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
+}
+
+.sidebar li:has(.faIcon.active){
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
+}
+
+.sidebar li:has(.mcIcon.active){
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
+}
+
+.sidebar li:hover{
+    box-shadow: 0 0 0 3pt var(--blue);
+    border-radius: 20px;
 }
 
 .sidebar span{
     display: none;
+    font-size: var(--mFont);
+    font-weight: bold;
+    margin-left: 25px;
+}
+
+.sidebar.active span{
+    display: block;
 }
 
 /* Icons Style */
@@ -93,6 +134,7 @@
     justify-content: center;
     align-items: center;
 }
+
 
 .sidebar li > div img{
     width: var(--iconImgSize);
