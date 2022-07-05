@@ -32,7 +32,10 @@ export function PersonalInfo() {
         <div className="personal_info">
                 <img src="" alt="Profile Pic" />
                 <div className="pinfo_container">
-                    <h3>Name:</h3>
+                    <span>
+                        <h3>Name:</h3>
+                        <p className="name"></p>
+                    </span>
                     <div className="pinfo_row">
                         <span>
                             <h3>Age:</h3>
@@ -64,11 +67,11 @@ export function Measurements() {
                 <div className="measures-row">
                     <span>
                         <h3>Weight:</h3>
-                        <p></p>
+                        <p><h3>kg</h3></p>
                     </span>
                     <span>
                         <h3>Height:</h3>
-                        <p></p>
+                        <p><h3>m</h3></p>
                     </span>
                 </div>
                 <div className="bmi-row">

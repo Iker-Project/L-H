@@ -4,6 +4,7 @@
   --bgColor: #EBEBEB;
   --blue: #007BEC;
   --gray1: #838383;
+  --green1: #05E100;
 
 
   --titleLogo: 75px;
@@ -11,7 +12,8 @@
 
   --sFont: 16px;
   --mFont: 24px;
-  --bFont: 36px;
+  --bFont: 28px;
+  --xlFont: 36px;
 
   /* Icons colors */
   --mhColor: #FB9600;
@@ -31,10 +33,18 @@ body{
 h1{
   margin-left: 15px;
   font-weight: bolder;
-  font-size: var(--bFont);
+  font-size: var(--xlFont);
 }
 
 h3 {
   color: var(--gray1);
   font-size: var(--sFont);
+  margin-right: 10px;
+}
+
+p {
+  font-weight: bold;
+  font-size: var(--bFont);
+  margin: 0;
+  margin-right: 10px;
 }
