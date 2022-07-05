@@ -2,11 +2,21 @@
 
 :root{
   --bgColor: #EBEBEB;
+  --blue: #007BEC;
   --gray1: #838383;
+
+
   --titleLogo: 75px;
-  --border_radius: 20px;
+  --border_radius: 15px;
 
   --sFont: 16px;
+  --bFont: 36px;
+
+  /* Icons colors */
+  --mhColor: #FB9600;
+  --scheduleColor: #EC0000;
+  --faColor: #05E100;
+  --mcColor: #00D8F5;
 }
 
 body{
@@ -15,4 +25,15 @@ body{
   width: 100%;
   height: 100%;
   margin: 0;
+}
+
+h1{
+  margin-left: 15px;
+  font-weight: bolder;
+  font-size: var(--bFont);
+}
+
+h3 {
+  color: var(--gray1);
+  font-size: var(--sFont);
 }

@@ -1,5 +1,6 @@
 :root {
     --iconsSize: 70px;
+    --iconImgSize: 45px;
     --menu_btn: 40px;
 }
 
@@ -11,6 +12,7 @@
     align-items: center;
     padding: 10px;
 }
+
 .menubtn_cont{
     width: var(--menu_btn);
     height: var(--menu_btn);
@@ -18,7 +20,6 @@
 }
 
 #menu_toggle{
-
     opacity: 0;
 }
 
@@ -78,11 +79,41 @@
     flex-direction: row;
 }
 
-.sidebar img{
-    width: var(--iconsSize);
-    height: var(--iconsSize);
-}
-
 .sidebar span{
     display: none;
+}
+
+/* Icons Style */
+
+.sidebar li > div{
+    display: flex;
+    width: var(--iconsSize);
+    height: var(--iconsSize);
+    border-radius: var(--border_radius);
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar li > div img{
+    width: var(--iconImgSize);
+}
+
+.homeIcon{
+    background-color: var(--blue);
+}
+
+.mhIcon{
+    background-color: var(--mhColor);
+}
+
+.scheduleIcon{
+    background-color: var(--scheduleColor);
+}
+
+.faIcon{
+    background-color: var(--faColor);
+}
+
+.mcIcon{
+    background-color: var(--mcColor);
 }

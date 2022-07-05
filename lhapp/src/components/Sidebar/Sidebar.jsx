@@ -1,7 +1,10 @@
 import React from 'react'
+import { useState } from 'react'
 import "./Sidebar.css"
 
 export default function Sidebar() {
+    const [openMenu, updateMenu] = useState(false)
+
     return (
         <div className="sidebar">
             <div className="menubtn_cont">
@@ -11,12 +14,12 @@ export default function Sidebar() {
                 </label>
             </div>
 
-            <ul className="menu">
-                <li><img src="" alt="H" /><span>Home</span></li>
-                <li><img src="" alt="MH" /><span>Medical History</span></li>
-                <li><img src="" alt="S" /><span>Schedule</span></li>
-                <li><img src="" alt="FA" /><span>First Aids</span></li>
-                <li><img src="" alt="MC" /><span>Medical Cards</span></li>
+            <ul className={`menu ${openMenu ? "" : "active"}`}>
+                <li><div className="homeIcon"><img src="../../../img/profileIcon.png" alt="H" /></div><span>Home</span></li>
+                <li><div className="mhIcon"><img src="../../../img/mhIcon.png" alt="H" /></div><span>Medical History</span></li>
+                <li><div className="scheduleIcon"><img src="../../../img/scheduleIcon.png" alt="H" /></div><span>Schedule</span></li>
+                <li><div className="faIcon"><img src="../../../img/faIcon.png" alt="H" /></div><span>First Aids</span></li>
+                <li><div className="mcIcon"><img src="../../../img/mcIcon.png" alt="H" /></div><span>Medical Cards</span></li>
             </ul>
         </div>
     )
