@@ -5,6 +5,13 @@
 - "Patient": a user who wants to access and record their personal health information..
 - "Doctor": a user who is providing help to their patients and have acess to their patient's information.
 
+# User personas
+
+Who is the user? What's their name and where are they from?
+What is their age and access/sophistication with technology? Do they mainly use a phone, computer, etc? How often might they access your site?
+What is their motivation for using the app?
+What are potential pain points for this user?
+
 # User Stories
 
 - "As a patient, I want to create a profile to register all my personal health information, so I will never forget it."
