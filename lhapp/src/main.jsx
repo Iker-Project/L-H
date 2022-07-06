@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+// import Welcome from "./components/Welcome/Welcome"
 import App from "./components/App/App"
 import "./globals.css"
 

@@ -4,12 +4,14 @@
   --bgColor: #EBEBEB;
   --blue: #007BEC;
   --gray1: #838383;
+  --gray2: #b8b8b8;
   --green1: #05E100;
 
 
   --titleLogo: 75px;
   --border_radius: 15px;
 
+  --xsFont: 12px;
   --sFont: 16px;
   --mFont: 24px;
   --bFont: 28px;
@@ -31,7 +33,7 @@ body{
 }
 
 h1{
-  margin-left: 15px;
+  margin: 0 15px;
   font-weight: bolder;
   font-size: var(--xlFont);
 }

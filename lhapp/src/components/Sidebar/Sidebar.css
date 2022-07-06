@@ -61,12 +61,12 @@
 
 .menu_btn > span::before {
     content: ' ';
-    top: -12px;
+    top: -15px;
 }
 
 .menu_btn > span::after {
     content: ' ';
-    top: 12px;
+    top: 15px;
 }
 
 .sidebar ul{

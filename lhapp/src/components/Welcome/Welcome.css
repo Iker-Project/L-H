@@ -1,0 +1,106 @@
+.welcome, .signup, .profile-form {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.block{
+    background-color: white;
+    border-radius: var(--border_radius);
+}
+
+.container {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-login{
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-login input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-style: none;
+    margin: 10px 0;
+    height: 25px;
+    width: 250px;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 0 0 1.5pt var(--gray2);
+    font-size: var(--sFont);
+}
+
+.user-login button {
+    border-style: none;
+    margin: 10px 0;
+    height: 40px;
+    width: 250px;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: var(--blue);
+    font-size: var(--sFont);
+    color: white;
+}
+
+
+.logoWelcome{
+    width: 100px;
+}
+
+.signUp-link{
+    font-size: var(--sFont);
+}
+
+/* Sign Up */
+
+.signup-form{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-form > div{
+    display: flex;
+    flex-direction: row;
+    width: 102%;
+    justify-content: space-between;
+}
+
+.signup-form > div input{
+    width: 45%;
+}
+
+.signup-form input{
+    border-style: none;
+    margin: 10px 0;
+    height: 25px;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 0 0 1.5pt var(--gray2);
+    font-size: var(--sFont);
+}
+
+.signup-form button{
+    border-style: none;
+    margin: 10px 0;
+    height: 42px;
+    width: 250px;
+    border-radius: 10px;
+    font-size: var(--sFont);
+    background-color: var(--blue);
+    color: white;
+    margin-top: 25px;
+}
+
+/* Profile Form */

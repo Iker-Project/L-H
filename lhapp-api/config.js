@@ -1,0 +1,7 @@
+const PARSE_APP_ID = "Bt4zKeJK6GyljJzNHNSnkBMSgPAdxbhLAf84fLAu"
+const PARSE_JAVASCRIPT_KEY = "z33if2tcZ0YpzumwrSOH2pwFBmDVCZku9hEIFKKr"
+
+module.exports = {
+    PARSE_APP_ID,
+    PARSE_JAVASCRIPT_KEY
+}
