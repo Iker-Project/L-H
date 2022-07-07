@@ -3,6 +3,7 @@ import axios from "axios"
 import { Link } from "react-router-dom";
 import "./SignUp.css"
 import * as config from '../../config'
+import PasswordMeter from './PasswordMeter'
 
 export default function SignUp({ handleLogin }){
     const fullname = React.createRef();
@@ -46,7 +47,7 @@ export default function SignUp({ handleLogin }){
                     <form action="" className="signup-form" onSubmit={handleSubmit}>
                         <input type="text" placeholder="Full Name" ref={fullname}/>
                         <input type="email" placeholder="Email" ref={email}/>
-                        <input type="password" placeholder="Password" ref={password}/>
+                        <PasswordMeter password={password}/>
                         <div>
                             <input type="date" ref={birthdate}/>
                             <InputOption sex={sex} updateSex={updateSex}/>
