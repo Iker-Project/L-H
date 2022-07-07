@@ -10,10 +10,30 @@ import SignUp from "../SignUp/SignUp"
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem("current_user_id") !== null)
-  const [userLogIn, updateLogIn] = React.useState({
-    email: "",
-    password: ""
-  })
+
+  const addAuthenticationHeader = () => {
+    const currentUserId = localStorage.getItem("current_user_id")
+    if (currentUserId !== null) {
+      axios.defaults.headers.common = {
+        "current_user_id": currentUserId
+      };
+    }
+  }
+  addAuthenticationHeader()
+
+  const handleLogout = () => {
+    localStorage.removeItem("current_user_id")
+    axios.defaults.headers.common = {};
+    setIsLoggedIn(false)
+  }
+
+  const handleLogin = (user) => {
+    console.log(user)
+    localStorage.setItem("current_user_id", user["objectId"])
+    addAuthenticationHeader()
+
+    setIsLoggedIn(true)
+  }
 
   return (
     <div className="app">
@@ -22,8 +42,8 @@ export default function App() {
           {/* <Sidebar/> */}
           <div className="routes_container">
             <Routes>
-              <Route path="/" element={<Welcome/>} />
-              <Route path="/SignUp" element={<SignUp/>}/>
+              <Route path="/" element={<Welcome handleLogin={handleLogin}/>} />
+              <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
               <Route path="/Home" element={<MainApp/>} />
             </Routes>
           </div>
