@@ -13,6 +13,8 @@ export default function PasswordMeter({password}) {
         //     if (password.current.value.includes(specialChars[i])){ points[1] = true }
         // }
 
+        // Test Pull Request
+
         if (password.length >= 8){ points[0] = true } else { points[0] = false }
         if (password.length >= 8){ points[0] = true } else { points[0] = false }
         if (password.length >= 8){ points[0] = true } else { points[0] = false }
