@@ -4,41 +4,48 @@ import { Link } from "react-router-dom";
 import "./SignUp.css"
 import * as config from '../../config'
 import PasswordMeter from './PasswordMeter'
+import PopUp from "../PopUp/PopUp"
 
 export default function SignUp({ handleLogin }){
-    // const fullname = React.createRef();
+    const [popUp, updatePopUp] = React.useState(false)
 
     const [fullname, updatefullName] = React.useState("")
-
     const email = React.createRef();
-    const password = React.createRef();
-    const birthdate = React.createRef();
 
+    const password = React.createRef();
+    const [validPassword, updateValidPassword] = React.useState(false);
+
+    const birthdate = React.createRef();
     const [sex, updateSex] = React.useState("Sex:")
 
     const handleSubmit = event => {
         event.preventDefault();
 
-        const register = async () => {
-            try {
-                const [year, month, day] = birthdate.current.value.split('-');
-                const date = new Date(+year, +month - 1, +day);
+        if (validPassword){
+            const register = async () => {
+                try {
+                    const [year, month, day] = birthdate.current.value.split('-');
+                    const date = new Date(+year, +month - 1, +day);
 
-                const res = await axios.post(`http://localhost:3001/register`, {
-                    "username" : fullname,
-                    "email" : email.current.value,
-                    "password" : password.current.value,
-                    "birthdate" : date.toLocaleDateString('en-US'),
-                    "sex" : sex
-                    })
+                    const res = await axios.post(`http://localhost:3001/register`, {
+                        "username" : fullname,
+                        "email" : email.current.value,
+                        "password" : password.current.value,
+                        "birthdate" : date.toLocaleDateString('en-US'),
+                        "sex" : sex
+                        })
 
-                handleLogin(res.data.user)
-            } catch (err) {
-                alert(err)
+                    handleLogin(res.data.user)
+                } catch (err) {
+                    alert(err)
 
+                }
             }
+            register()
         }
-        register()
+        else {
+            updatePopUp(true)
+        }
     }
 
     return (
@@ -59,6 +66,7 @@ export default function SignUp({ handleLogin }){
                     </form>
                 </div>
             </div>
+            {popUp ? <PopUp title={"Plase use another password"} description={"Your password is not strong enough, remember to use at least one special character, number and a Uppercase letter."} closeFunc={updatePopUp}/> : ""}
         </div>
     )
 }

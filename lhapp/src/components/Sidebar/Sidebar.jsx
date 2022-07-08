@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import "./Sidebar.css"
 
-export default function Sidebar() {
+export default function Sidebar({handleLogout}) {
     const [openMenu, updateMenu] = useState(false)
     const [opcSelected, updateOption] = useState(1)
 
@@ -18,6 +18,7 @@ export default function Sidebar() {
                 <li onClick={() => updateOption(3)}><div className={`scheduleIcon ${opcSelected === 3 ? "active" : ""}`}><img src="../../../img/scheduleIcon.png" alt="H" /></div><span>Schedule</span></li>
                 <li onClick={() => updateOption(4)}><div className={`faIcon ${opcSelected === 4 ? "active" : ""}`}><img src="../../../img/faIcon.png" alt="H" /></div><span>First Aids</span></li>
                 <li onClick={() => updateOption(5)}><div className={`mcIcon ${opcSelected === 5 ? "active" : ""}`}><img src="../../../img/mcIcon.png" alt="H" /></div><span>Medical Cards</span></li>
+                <li onClick={() => handleLogout()}><div className={`mcIcon ${opcSelected === 5 ? "active" : ""}`}></div><span>Medical Cards</span></li>
             </ul>
         </div>
     )

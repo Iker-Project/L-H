@@ -12,6 +12,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem("current_user_id") !== null)
 
   const addAuthenticationHeader = () => {
+    console.log('isLoggedIn: ', isLoggedIn);
     const currentUserId = localStorage.getItem("current_user_id")
     if (currentUserId !== null) {
       axios.defaults.headers.common = {
@@ -23,8 +24,10 @@ export default function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("current_user_id")
+    console.log('localStorage: ', localStorage);
     axios.defaults.headers.common = {};
     setIsLoggedIn(false)
+    window.location.href='http://localhost:3000';
   }
 
   const handleLogin = (user) => {
@@ -44,7 +47,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Welcome handleLogin={handleLogin}/>} />
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
-              <Route path="/Home" element={<MainApp/>} />
+              {isLoggedIn ? <Route path="/Home" element={<MainApp handleLogout={handleLogout}/>} /> : ""}
             </Routes>
           </div>
         </main>
@@ -53,10 +56,10 @@ export default function App() {
   )
 }
 
-export function MainApp(){
+export function MainApp({handleLogout}){
   return(
     <main>
-          <Sidebar/>
+          <Sidebar handleLogout={handleLogout}/>
           <div className="routes_container">
             <Routes>
               <Route path="/" element={<Home/>} />

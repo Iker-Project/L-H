@@ -26,3 +26,15 @@
 .popup-window span{
     font-size: var(--xsFont);
 }
+
+.popup-window button{
+    border-style: none;
+    margin: 10px 0;
+    height: 42px;
+    width: 200px;
+    border-radius: 10px;
+    font-size: var(--sFont);
+    background-color: var(--blue);
+    color: white;
+    margin-top: 25px;
+}
