@@ -6,7 +6,10 @@ import * as config from '../../config'
 import PasswordMeter from './PasswordMeter'
 
 export default function SignUp({ handleLogin }){
-    const fullname = React.createRef();
+    // const fullname = React.createRef();
+
+    const [fullname, updatefullName] = React.useState("")
+
     const email = React.createRef();
     const password = React.createRef();
     const birthdate = React.createRef();
@@ -22,7 +25,7 @@ export default function SignUp({ handleLogin }){
                 const date = new Date(+year, +month - 1, +day);
 
                 const res = await axios.post(`http://localhost:3001/register`, {
-                    "username" : fullname.current.value,
+                    "username" : fullname,
                     "email" : email.current.value,
                     "password" : password.current.value,
                     "birthdate" : date.toLocaleDateString('en-US'),
@@ -45,7 +48,7 @@ export default function SignUp({ handleLogin }){
                     <h2>Sign Up</h2>
                     <h3>Account Information:</h3>
                     <form action="" className="signup-form" onSubmit={handleSubmit}>
-                        <input type="text" placeholder="Full Name" ref={fullname}/>
+                        <input type="text" placeholder="Full Name" value={fullname} onChange={(e) => updatefullName(e.target.value)}/>
                         <input type="email" placeholder="Email" ref={email}/>
                         <PasswordMeter password={password}/>
                         <div>
