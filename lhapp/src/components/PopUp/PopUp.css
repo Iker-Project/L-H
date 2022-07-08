@@ -1,0 +1,28 @@
+.popup-window{
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-window .block{
+    width: 25%;
+    height: fit-content;
+}
+
+.popup-window h3{
+    margin-right: 0;
+}
+
+.popup-window span{
+    font-size: var(--xsFont);
+}
