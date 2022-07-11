@@ -10,43 +10,45 @@ export default function SignUp({ handleLogin }){
     const [popUp, updatePopUp] = React.useState(false)
 
     const [fullname, updatefullName] = React.useState("")
-    const email = React.createRef();
+    const [email, updateEmail] = React.useState("");
 
-    const password = React.createRef();
+    const [password, updatePassword] = React.useState("");
     const [validPassword, updateValidPassword] = React.useState(false);
 
-    const birthdate = React.createRef();
+    const [birthday, updateBirthday] = React.useState("");
     const [sex, updateSex] = React.useState("Sex:")
 
-    const handleSubmit = event => {
+    const onChangeDate = (e) => {
+        const newDate = e.target.value;
+        const [year, month, day] = newDate.split('-');
+        const date = new Date(+year, +month - 1, +day);
+        updateBirthday(date.toLocaleDateString('en-US'));
+      };
+
+    const handleSubmit = React.useCallback( async (event) => {
         event.preventDefault();
 
         if (validPassword){
-            const register = async () => {
-                try {
-                    const [year, month, day] = birthdate.current.value.split('-');
-                    const date = new Date(+year, +month - 1, +day);
+            try {
+                const res = await axios.post(`http://localhost:3001/register`, {
+                    "username" : fullname,
+                    "email" : email,
+                    "password" : password,
+                    "birthdate" : birthday,
+                    "sex" : sex
+                    })
 
-                    const res = await axios.post(`http://localhost:3001/register`, {
-                        "username" : fullname,
-                        "email" : email.current.value,
-                        "password" : password.current.value,
-                        "birthdate" : date.toLocaleDateString('en-US'),
-                        "sex" : sex
-                        })
+                handleLogin(res.data.user)
+                window.location.href='http://localhost:3000/Home';
+            } catch (err) {
+                alert(err)
 
-                    handleLogin(res.data.user)
-                } catch (err) {
-                    alert(err)
-
-                }
             }
-            register()
         }
         else {
             updatePopUp(true)
         }
-    }
+    }, [fullname, email, password, validPassword, birthday, sex])
 
     return (
         <div className="signup">
@@ -56,10 +58,10 @@ export default function SignUp({ handleLogin }){
                     <h3>Account Information:</h3>
                     <form action="" className="signup-form" onSubmit={handleSubmit}>
                         <input type="text" placeholder="Full Name" value={fullname} onChange={(e) => updatefullName(e.target.value)}/>
-                        <input type="email" placeholder="Email" ref={email}/>
-                        <PasswordMeter password={password}/>
+                        <input type="email" placeholder="Email" onChange={(e) => updateEmail(e.target.value)}/>
+                        <PasswordMeter password={password} updatePassword={updatePassword} updateValidPassword={updateValidPassword}/>
                         <div>
-                            <input type="date" ref={birthdate}/>
+                            <input type="date" onChange={(e) => onChangeDate(e)}/>
                             <InputOption sex={sex} updateSex={updateSex}/>
                         </div>
                         <button type="submit">Next</button>
