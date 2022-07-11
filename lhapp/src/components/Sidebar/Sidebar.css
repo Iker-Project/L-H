@@ -124,6 +124,11 @@
     display: block;
 }
 
+.menu li:last-child{
+    position: absolute;
+    bottom: 0;
+}
+
 /* Icons Style */
 
 .sidebar li > div{
@@ -158,4 +163,12 @@
 
 .mcIcon{
     background-color: var(--mcColor);
+}
+
+.loIcon{
+    background-color: var(--gray1);
+}
+
+.loIcon img{
+    margin-right: 10px;
 }

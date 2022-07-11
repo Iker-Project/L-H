@@ -12,7 +12,6 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem("current_user_id") !== null)
 
   const addAuthenticationHeader = () => {
-    console.log('isLoggedIn: ', isLoggedIn);
     const currentUserId = localStorage.getItem("current_user_id")
     if (currentUserId !== null) {
       axios.defaults.headers.common = {
