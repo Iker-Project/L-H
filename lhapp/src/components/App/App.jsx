@@ -24,13 +24,13 @@ export default function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("current_user_id")
-    console.log('localStorage: ', localStorage);
+
     axios.defaults.headers.common = {};
     setIsLoggedIn(false)
   }
 
   const handleLogin = (user) => {
-    console.log(user)
+
     localStorage.setItem("current_user_id", user["objectId"])
     addAuthenticationHeader()
 
@@ -41,15 +41,11 @@ export default function App() {
     <div className="app">
       <BrowserRouter>
         <main>
-        {/* {isLoggedIn && (
-          <Navigate to="/Home" replace={true}/>
-        )} */}
           <div className="routes_container">
             <Routes>
               <Route path="/" element={<Welcome isLoggedIn={isLoggedIn} handleLogin={handleLogin}/>} />
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
               <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
-              {/* {isLoggedIn ? <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} /> : ""} */}
             </Routes>
           </div>
         </main>
