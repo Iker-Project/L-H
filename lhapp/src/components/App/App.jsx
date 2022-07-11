@@ -1,6 +1,7 @@
 import * as React from "react"
 import axios from "axios"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./App.css"
 import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
@@ -26,7 +27,6 @@ export default function App() {
     console.log('localStorage: ', localStorage);
     axios.defaults.headers.common = {};
     setIsLoggedIn(false)
-    window.location.href='http://localhost:3000';
   }
 
   const handleLogin = (user) => {
@@ -41,12 +41,15 @@ export default function App() {
     <div className="app">
       <BrowserRouter>
         <main>
-          {/* <Sidebar/> */}
+        {/* {isLoggedIn && (
+          <Navigate to="/Home" replace={true}/>
+        )} */}
           <div className="routes_container">
             <Routes>
-              <Route path="/" element={<Welcome handleLogin={handleLogin}/>} />
+              <Route path="/" element={<Welcome isLoggedIn={isLoggedIn} handleLogin={handleLogin}/>} />
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
-              {isLoggedIn ? <Route path="/Home" element={<MainApp handleLogout={handleLogout}/>} /> : ""}
+              <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
+              {/* {isLoggedIn ? <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} /> : ""} */}
             </Routes>
           </div>
         </main>
@@ -55,15 +58,23 @@ export default function App() {
   )
 }
 
-export function MainApp({handleLogout}){
+export function MainApp({isLoggedIn, handleLogout}){
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!isLoggedIn){
+      navigate("../", { replace: true })
+    }
+  }, [])
+
   return(
     <main>
-          <Sidebar handleLogout={handleLogout}/>
-          <div className="routes_container">
-            <Routes>
-              <Route path="/" element={<Home/>} />
-            </Routes>
-          </div>
+      <Sidebar handleLogout={handleLogout}/>
+      <div className="routes_container">
+        <Routes>
+          <Route path="/" element={<Home/>} />
+        </Routes>
+      </div>
     </main>
   )
 }

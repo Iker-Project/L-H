@@ -1,15 +1,23 @@
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import "./Sidebar.css"
 import AlertWindow from '../PopUp/AlertWindow'
 
 export default function Sidebar({handleLogout}) {
+    const navigate = useNavigate()
+
     const [openMenu, updateMenu] = useState(false)
     const [showAlert, updateShowAlert] = useState(false)
     const [opcSelected, updateOption] = useState(1)
 
     function handlerShowAlert(){
         updateShowAlert(true);
+    }
+
+    function handlerLogOutNav(){
+        handleLogout()
+        navigate("../", { replace: true })
     }
 
     return (
@@ -26,7 +34,7 @@ export default function Sidebar({handleLogout}) {
                 <li onClick={() => updateOption(5)}><div className={`mcIcon ${opcSelected === 5 ? "active" : ""}`}><img src="../../../img/mcIcon.png" alt="Medical cards" /></div><span>Medical Cards</span></li>
                 <li onClick={handlerShowAlert}><div className={`loIcon ${opcSelected === 5 ? "active" : ""}`}><img src="../../../img/LogoutIcon.png" alt="Log out" /></div><span>Log Out</span></li>
             </ul>
-            {showAlert ? <AlertWindow title={"You are Logging Out..."} cancelFunc={() => {updateShowAlert(false)}} acceptFunc={handleLogout}/> : ""}
+            {showAlert ? <AlertWindow title={"You are Logging Out..."} cancelFunc={() => {updateShowAlert(false)}} acceptFunc={() => handlerLogOutNav()}/> : ""}
         </div>
     )
 }

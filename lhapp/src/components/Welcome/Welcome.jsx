@@ -1,11 +1,20 @@
 import * as React from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Welcome.css"
 
-export default function Welcome({handleLogin}) {
+export default function Welcome({isLoggedIn, handleLogin}) {
+    const navigate = useNavigate()
+
     const email = React.createRef();
     const password = React.createRef();
+
+  React.useEffect(() => {
+    if (isLoggedIn){
+      navigate("../Home", { replace: true })
+    }
+  }, [])
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -18,7 +27,7 @@ export default function Welcome({handleLogin}) {
                     "password" : password.current.value
                     })
                 handleLogin(res.data.user)
-                window.location.href='http://localhost:3000/Home';
+                navigate("../Home", { replace: true })
             } catch (err) {
                 alert(err)
                 console.log(err)
