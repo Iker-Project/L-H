@@ -1,7 +1,21 @@
 import React from 'react'
 import "./Home.css"
+import axios from "axios"
 
 export default function Home() {
+    const [data, setData] = React.useState([])
+
+    React.useEffect(() => {
+        const fetchMessages = (async () => {
+            try {
+              const res = await axios.get(`http://localhost:3001/userdata`)
+              setData(res.data.messages)
+            } catch (err) {
+              console.log(err)
+            }
+        })()
+    }, []);
+
     return (
         <div className="home">
             <div className="title">
@@ -9,6 +23,7 @@ export default function Home() {
                     <img src="../../../img/AppIcon.png" alt="Home" />
                 </div>
                 <h1>Home</h1>
+                <button></button>
             </div>
 
             <PersonalInfo/>

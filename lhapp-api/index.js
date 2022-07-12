@@ -37,6 +37,40 @@ app.post('/register', async (req, res) => {
   }
 })
 
+app.get('/userdata', async (req, res) => {
+  try {
+    const query = new Parse.Query("Messages")
+
+    query.descending("createdAt")
+
+    data = await query.find()
+
+    res.send({"data" : data})
+  } catch (error) {
+    res.status(400)
+    res.send({"error" : "Message query failed: " + error })
+  }
+})
+
+app.post('/userdata', async (req, res) => {
+  try {
+    const message = new Parse.Object("Messages", req.body)
+
+    currentUserId = req.headers["current_user_id"]
+    const user = new Parse.User()
+    user.id = currentUserId
+
+    message.set("user", user)
+
+    await message.save()
+    res.status(201)
+    res.send({"message" : message})
+  } catch (error) {
+    res.status(400)
+    res.send({"error" : "Create message failed: " + error })
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
