@@ -55,12 +55,24 @@ export default function App() {
 }
 
 export function MainApp({isLoggedIn, handleLogout}){
+  const [data, setData] = React.useState([])
   const navigate = useNavigate();
 
   React.useEffect(() => {
     if (!isLoggedIn){
       navigate("../", { replace: true })
     }
+
+    const fetchUserData = (async () => {
+      axios.get(`http://localhost:3001/app/${localStorage.getItem("current_user_id")}`)
+        .then(response => {
+          console.log('res.data: ', response.data.userdata);
+          setData(response.data.userdata)
+        })
+        .catch(error => {
+          console.error("Error fetching: ", error)
+        })
+    })()
   }, [])
 
   return(
@@ -68,7 +80,7 @@ export function MainApp({isLoggedIn, handleLogout}){
       <Sidebar handleLogout={handleLogout}/>
       <div className="routes_container">
         <Routes>
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<Home data={data}/>} />
         </Routes>
       </div>
     </main>

@@ -21,16 +21,16 @@ export default function Welcome({isLoggedIn, handleLogin}) {
 
         const login = async () => {
             try {
-                console.log("Logging in")
                 const res = await axios.post(`http://localhost:3001/login`, {
                     "email" : email.current.value,
                     "password" : password.current.value
-                    })
+                })
+
                 handleLogin(res.data.user)
                 navigate("../Home", { replace: true })
             } catch (err) {
                 alert(err)
-                console.log(err)
+
             }
         }
         login()

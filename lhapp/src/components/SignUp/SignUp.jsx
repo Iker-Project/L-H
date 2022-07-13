@@ -36,7 +36,14 @@ export default function SignUp({ handleLogin }){
                     "password" : password,
                     "birthdate" : birthday,
                     "sex" : sex
-                    })
+                })
+
+                await axios.post(`http://localhost:3001/createData`, {
+                    "homeData": {},
+                    "medicalHistoryData": {},
+                    "scheduleData": {},
+                    "medicalCardsData": {}
+                })
 
                 handleLogin(res.data.user)
                 window.location.href='http://localhost:3000/Home';

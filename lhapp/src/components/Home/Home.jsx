@@ -2,19 +2,8 @@ import React from 'react'
 import "./Home.css"
 import axios from "axios"
 
-export default function Home() {
-    const [data, setData] = React.useState([])
-
-    React.useEffect(() => {
-        const fetchMessages = (async () => {
-            try {
-              const res = await axios.get(`http://localhost:3001/userdata`)
-              setData(res.data.messages)
-            } catch (err) {
-              console.log(err)
-            }
-        })()
-    }, []);
+export default function Home({data}) {
+    const [editMode, updateEditMode] = React.useState(false)
 
     return (
         <div className="home">
@@ -23,18 +12,18 @@ export default function Home() {
                     <img src="../../../img/AppIcon.png" alt="Home" />
                 </div>
                 <h1>Home</h1>
-                <button></button>
+                {/* <button onClick={() => updateEditMode(!editMode)}></button> */}
             </div>
 
-            <PersonalInfo/>
+            <PersonalInfo data={data.logginUserData} editMode={editMode}/>
 
             <section className="table">
                 <section>
                     <section className="row">
-                        <Measurements/>
-                        <Allegies/>
+                        <Measurements editMode={editMode}/>
+                        <Allegies editMode={editMode}/>
                     </section>
-                        <VitalSigns/>
+                        <VitalSigns editMode={editMode}/>
                 </section>
                 <WhatsNext/>
             </section>
@@ -42,31 +31,42 @@ export default function Home() {
     )
 }
 
-export function PersonalInfo() {
+export function PersonalInfo({data, editMode}) {
+    const getAge = (dateString) =>{
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
     return (
         <div className="personal_info">
                 <img src="" alt="Profile Pic" />
                 <div className="pinfo_container">
                     <span>
                         <h3>Name:</h3>
-                        <p className="name"></p>
+                        <p className="name">{data.username}</p>
                     </span>
                     <div className="pinfo_row">
                         <span>
                             <h3>Age:</h3>
-                            <p></p>
+                            <p>{getAge(data.birthdate)}</p>
                         </span>
                         <span>
                             <h3>Birth Date:</h3>
-                            <p></p>
+                            <p>{data.birthdate}</p>
                         </span>
                         <span>
                             <h3>Sex:</h3>
-                            <p></p>
+                            <p>{data.sex}</p>
                         </span>
                         <span>
                             <h3>Blood Type:</h3>
-                            <p></p>
+                            <p>{data.bloodType}</p>
                         </span>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ export function PersonalInfo() {
     )
 }
 
-export function Measurements() {
+export function Measurements({editMode}) {
     return(
         <div className="measurements">
             <h2>Measurements</h2>
@@ -82,11 +82,11 @@ export function Measurements() {
                 <div className="measures-row">
                     <span>
                         <h3>Weight:</h3>
-                        <p>{} kg</p>
+                        {editMode ? <input type="text" /> : <p></p>}
                     </span>
                     <span>
                         <h3>Height:</h3>
-                        <p>{} m</p>
+                        {editMode ? <input type="text" /> : <p></p>}
                     </span>
                 </div>
                 <div className="bmi-row">
@@ -99,7 +99,7 @@ export function Measurements() {
     )
 }
 
-export function Allegies() {
+export function Allegies({editMode}) {
     return(
         <div className="allergies">
             <h2>Allergies</h2>
@@ -112,7 +112,7 @@ export function Allegies() {
     )
 }
 
-export function VitalSigns() {
+export function VitalSigns({editMode}) {
     return(
         <div className="vital-signs">
             <h2>Vital Signs</h2>
@@ -121,7 +121,7 @@ export function VitalSigns() {
                     <li>
                         <h3>Pulse Oximeter: </h3>
                         <div>
-                            <p></p>
+                            {editMode ? <input type="text" /> : <p></p>}
                             <h4>SpO2</h4>
                         </div>
                         <p className="text-status"></p>
@@ -129,7 +129,7 @@ export function VitalSigns() {
                     <li>
                         <h3>Heart Rate: </h3>
                         <div>
-                            <p></p>
+                            {editMode ? <input type="text" /> : <p></p>}
                             <h4>SpO2</h4>
                         </div>
                         <p className="text-status"></p>
@@ -137,7 +137,7 @@ export function VitalSigns() {
                     <li>
                         <h3>Temperature: </h3>
                         <div>
-                            <p></p>
+                            {editMode ? <input type="text" /> : <p></p>}
                             <h4>SpO2</h4>
                         </div>
                         <p className="text-status"></p>
@@ -145,7 +145,7 @@ export function VitalSigns() {
                     <li>
                         <h3>Blood Pressure: </h3>
                         <div>
-                            <p></p>
+                            {editMode ? <input type="text" /> : <p></p>}
                             <h4>SpO2</h4>
                         </div>
                         <p className="text-status"></p>
@@ -153,7 +153,7 @@ export function VitalSigns() {
                     <li>
                         <h3>Glucose: </h3>
                         <div>
-                            <p></p>
+                            {editMode ? <input type="text" /> : <p></p>}
                             <h4>SpO2</h4>
                         </div>
                         <p className="text-status"></p>
