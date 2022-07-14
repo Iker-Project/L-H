@@ -52,6 +52,18 @@ app.post('/createData', async (req, res) => {
   }
 })
 
+app.post('/updateData', async (req, res) => {
+  try {
+    let userData = new Parse.Object("UserData", req.body)
+    await userData.save()
+    res.status(201)
+    res.send({"userData" : userData})
+  } catch (error) {
+    res.status(400)
+    res.send({"error" : "Failed to create userdata: " + error })
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })

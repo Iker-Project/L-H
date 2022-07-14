@@ -39,7 +39,17 @@ export default function SignUp({ handleLogin }){
                 })
 
                 await axios.post(`${config.API_BASE_URL}/createData`, {
-                    "homeData": {},
+                    "userID": res.data.user["objectId"],
+                    "homeData": {
+                        "weight": 0,
+                        "height": 0,
+                        "allergies": [],
+                        "pulse": 0,
+                        "heartRate": 0,
+                        "temperature": 0,
+                        "pressure": 0,
+                        "glucose": 0
+                    },
                     "medicalHistoryData": {},
                     "scheduleData": {},
                     "medicalCardsData": {}

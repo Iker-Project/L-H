@@ -106,9 +106,15 @@
 }
 
 .edit-button{
-    width: 30px;
-    height: 30px;
+    border-style: none;
+    cursor: pointer;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
 
+.edit-button img{
+    width: 22px;
 }
 
 /* Measurements Style */
@@ -214,6 +220,29 @@
     width: 100px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-right: 30px;
+}
+
+.vitalsigns_container ul li div > input{
+    width: 100px;
+    margin-right: 10px;
+}
+
+.vitalsigns_container ul li div > p{
+    width: 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.vitalsigns_container ul li div > h4{
+    width: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.vitalsigns_container ul li > p{
+    font-size: var(--xlFont);
 }
 
 /* What's Next? Style */

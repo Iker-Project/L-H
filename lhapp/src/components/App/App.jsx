@@ -82,7 +82,7 @@ export function MainApp({isLoggedIn, handleLogout}){
       <Sidebar handleLogout={handleLogout}/>
       <div className="routes_container">
         <Routes>
-          <Route path="/" element={<Home data={data}/>} />
+          <Route path="/" element={<Home data={data} setData={setData}/>} />
         </Routes>
       </div>
     </main>
