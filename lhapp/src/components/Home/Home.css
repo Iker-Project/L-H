@@ -98,6 +98,19 @@
     margin-right: 25px;
 }
 
+.section-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.edit-button{
+    width: 30px;
+    height: 30px;
+
+}
+
 /* Measurements Style */
 
 .measurements {

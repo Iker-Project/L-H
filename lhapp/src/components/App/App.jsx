@@ -2,6 +2,7 @@ import * as React from "react"
 import axios from "axios"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import * as config from "../../config"
 import "./App.css"
 import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
@@ -45,7 +46,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Welcome isLoggedIn={isLoggedIn} handleLogin={handleLogin}/>} />
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
-              <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
+              <Route path="/Home/*" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
             </Routes>
           </div>
         </main>
@@ -59,12 +60,8 @@ export function MainApp({isLoggedIn, handleLogout}){
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!isLoggedIn){
-      navigate("../", { replace: true })
-    }
-
     const fetchUserData = (async () => {
-      axios.get(`http://localhost:3001/app/${localStorage.getItem("current_user_id")}`)
+      axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}`)
         .then(response => {
           console.log('res.data: ', response.data.userdata);
           setData(response.data.userdata)
@@ -73,6 +70,11 @@ export function MainApp({isLoggedIn, handleLogout}){
           console.error("Error fetching: ", error)
         })
     })()
+
+    if (!isLoggedIn){
+      navigate("../", { replace: true })
+    }
+
   }, [])
 
   return(

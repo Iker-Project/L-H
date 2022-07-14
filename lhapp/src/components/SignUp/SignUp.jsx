@@ -30,7 +30,7 @@ export default function SignUp({ handleLogin }){
 
         if (validPassword){
             try {
-                const res = await axios.post(`http://localhost:3001/register`, {
+                const res = await axios.post(`${config.API_BASE_URL}/register`, {
                     "username" : fullname,
                     "email" : email,
                     "password" : password,
@@ -38,7 +38,7 @@ export default function SignUp({ handleLogin }){
                     "sex" : sex
                 })
 
-                await axios.post(`http://localhost:3001/createData`, {
+                await axios.post(`${config.API_BASE_URL}/createData`, {
                     "homeData": {},
                     "medicalHistoryData": {},
                     "scheduleData": {},

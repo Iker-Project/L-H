@@ -49,24 +49,24 @@ export function PersonalInfo({data, editMode}) {
                 <div className="pinfo_container">
                     <span>
                         <h3>Name:</h3>
-                        <p className="name">{data.username}</p>
+                        <p className="name">{data ? data.username : "Name"}</p>
                     </span>
                     <div className="pinfo_row">
                         <span>
                             <h3>Age:</h3>
-                            <p>{getAge(data.birthdate)}</p>
+                            <p>{data ? getAge(data.birthdate) : "Age"}</p>
                         </span>
                         <span>
                             <h3>Birth Date:</h3>
-                            <p>{data.birthdate}</p>
+                            <p>{data ? data.birthdate : "11/28/2003"}</p>
                         </span>
                         <span>
                             <h3>Sex:</h3>
-                            <p>{data.sex}</p>
+                            <p>{data ? data.sex : "Sex"}</p>
                         </span>
                         <span>
                             <h3>Blood Type:</h3>
-                            <p>{data.bloodType}</p>
+                            <p>{data ? data.bloodType : "Blood"}</p>
                         </span>
                     </div>
                 </div>
@@ -77,7 +77,10 @@ export function PersonalInfo({data, editMode}) {
 export function Measurements({editMode}) {
     return(
         <div className="measurements">
-            <h2>Measurements</h2>
+            <div className="section-header">
+                <h2>Measurements</h2>
+
+            </div>
             <div className="measure_container">
                 <div className="measures-row">
                     <span>

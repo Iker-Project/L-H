@@ -10,22 +10,15 @@ Parse.serverURL = "https://parseapi.back4app.com"
 router.get('/:user', async (req, res) => {
   try {
     const user = new Parse.Query("User");
-    const userData = new Parse.Query("UserData");
-
-    database = await userData.find()
+    const userDataQuery = new Parse.Query("UserData");
+    const userDataParse = await userDataQuery.equalTo('userID', req.params.user).first();
 
     user.get(req.params.user)
       .then((data) => {
         const logginUserData = data.toJSON()
-
-        database.map((userData) => {
-          const userJSON = userData.toJSON()
-
-          if (userJSON.userID == req.params.user){
-
-            res.send({"userdata" : {logginUserData, userJSON}})
-          }
-        })
+        const userData = userDataParse.toJSON()
+        console.log("Got user info")
+        res.send({"userdata" : {logginUserData, userData}})
       }, (error) => {
         res.send({"error" : "No user found: " + error })
       });
