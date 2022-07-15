@@ -2,6 +2,7 @@ import * as React from "react"
 import axios from "axios"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import * as config from "../../config"
 import "./App.css"
 import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
@@ -45,7 +46,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Welcome isLoggedIn={isLoggedIn} handleLogin={handleLogin}/>} />
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
-              <Route path="/Home" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
+              <Route path="/Home/*" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
             </Routes>
           </div>
         </main>
@@ -55,12 +56,25 @@ export default function App() {
 }
 
 export function MainApp({isLoggedIn, handleLogout}){
+  const [data, setData] = React.useState([])
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    const fetchUserData = (async () => {
+      axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}`)
+        .then(response => {
+          console.log('res.data: ', response.data.userdata);
+          setData(response.data.userdata)
+        })
+        .catch(error => {
+          console.error("Error fetching: ", error)
+        })
+    })()
+
     if (!isLoggedIn){
       navigate("../", { replace: true })
     }
+
   }, [])
 
   return(
@@ -68,7 +82,7 @@ export function MainApp({isLoggedIn, handleLogout}){
       <Sidebar handleLogout={handleLogout}/>
       <div className="routes_container">
         <Routes>
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<Home data={data} setData={setData}/>} />
         </Routes>
       </div>
     </main>

@@ -30,13 +30,30 @@ export default function SignUp({ handleLogin }){
 
         if (validPassword){
             try {
-                const res = await axios.post(`http://localhost:3001/register`, {
+                const res = await axios.post(`${config.API_BASE_URL}/register`, {
                     "username" : fullname,
                     "email" : email,
                     "password" : password,
                     "birthdate" : birthday,
                     "sex" : sex
-                    })
+                })
+
+                await axios.post(`${config.API_BASE_URL}/createData`, {
+                    "userID": res.data.user["objectId"],
+                    "homeData": {
+                        "weight": 0,
+                        "height": 0,
+                        "allergies": [],
+                        "pulse": 0,
+                        "heartRate": 0,
+                        "temperature": 0,
+                        "pressure": 0,
+                        "glucose": 0
+                    },
+                    "medicalHistoryData": {},
+                    "scheduleData": {},
+                    "medicalCardsData": {}
+                })
 
                 handleLogin(res.data.user)
                 window.location.href='http://localhost:3000/Home';
