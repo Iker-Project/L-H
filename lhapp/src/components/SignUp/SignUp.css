@@ -16,6 +16,10 @@
     width: 45%;
 }
 
+.signup-form .dropdown-container{
+    width: 45%;
+}
+
 .signup-form input{
     border-style: none;
     margin: 10px 0;
@@ -39,7 +43,7 @@
     margin-top: 25px;
 }
 
-.input{
+/* .input{
     width: 45%;
     height: 25px;
     margin: 10px 0;
@@ -47,14 +51,14 @@
     padding: 5px;
     box-shadow: 0 0 0 1.5pt var(--gray2);
     font-size: var(--sFont);
-}
+} */
 
 .input span{
     font-size: var(--sFont) !important;
     font-weight: normal !important;
 }
 
-.dropdown-button{
+/* .dropdown-button{
     z-index: 1000;
     width: inherit;
     cursor: pointer;
@@ -75,9 +79,9 @@
 
 .arrowMenu.active{
     transform: rotateZ(0deg);
-}
+} */
 
-.dropdown-button > span{
+/* .dropdown-button > span{
     width: 300px;
     font-size: 18px;
     font-weight: bold;
@@ -106,4 +110,4 @@
     cursor: pointer;
     background-color: var(--bgColor);
     border-radius: 10px;
-}
+} */
