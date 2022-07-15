@@ -22,7 +22,8 @@ export default function MedicalHistory() {
                     <IllnessContainer/>
                 </div>
                 <div className="second-row">
-                    <h2>{optionSelected}</h2>
+                    {/* <IllnessInformation/> */}
+                    <AddIllness/>
                 </div>
             </section>
         </div>
@@ -31,12 +32,55 @@ export default function MedicalHistory() {
 
 export function IllnessContainer(){
     return(
-        <div className="illness-container">
-            <div>
-                <p>Illness name</p>
-                <div className="illness-light"></div>
+        <div className="illness-block">
+            <div className="illness-container">
+                <div>
+                    <p>Illness name</p>
+                    <div className="illness-light"></div>
+                </div>
+                <h3>Date</h3>
             </div>
-            <h3>Date</h3>
+        </div>
+    )
+}
+
+export function IllnessInformation(){
+    return(
+        <div className="illness-info">
+            <h2>Illness Selected</h2>
+            <div className="illness-block">
+                <div className="illness-content">
+                    <div>
+                        <h3>Date:</h3>
+                        <p>11/28/2003</p>
+                    </div>
+                    <div>
+                        <h3>Description:</h3>
+                        <p>Description...</p>
+                    </div>
+                    <div>
+                        <h3>Attended:</h3>
+                        <div className="illness-light"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export function AddIllness(){
+    return(
+        <div className="add-illness">
+            <h2>Add Illness</h2>
+            <div className="illness-block">
+                <div className="addIllness-container">
+                    <form action="" className="addIllness-form">
+                        <input type="text" placeholder="Illness name"/>
+                        <textarea name="" placeholder="Illness description..." id="" cols="30" rows="10"></textarea>
+                        <button type="submit" className="classic-button">Add</button>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 }

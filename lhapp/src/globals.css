@@ -44,8 +44,8 @@ h3 {
   color: var(--gray1);
   font-size: var(--sFont);
   margin-right: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 p {
@@ -53,4 +53,16 @@ p {
   font-size: var(--bFont);
   margin: 0;
   margin-right: 10px;
+}
+
+.classic-button{
+  width: 100%;
+  border-style: none;
+  border-radius: var(--border_radius);
+  background-color: var(--blue);
+  color: white;
+  font-size: var(--sFont);
+  font-weight: bold;
+  padding: 15px 0;
+  cursor: pointer;
 }
