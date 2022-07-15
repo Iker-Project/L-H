@@ -1,0 +1,76 @@
+.medical-history {
+    width: 90%;
+    margin: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.medical-history .title-logo{
+    background-color: var(--mhColor);
+    width: var(--titleLogo);
+    height: var(--titleLogo);
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-logo img{
+    width: var(--subLogos);
+    height: var(--subLogos);
+    padding-right: 2px;
+}
+
+.rows{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.first-row{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 50px 15px 5px;
+}
+
+.second-row{
+    width: 100%;
+}
+
+.second-row h2{
+    margin: 15px 0;
+}
+
+/* Illness Container */
+
+.illness-container{
+    width: 100%;
+    background-color: white;
+    padding: 10px;
+    border-radius: var(--border_radius);
+    margin: 10px 0;
+}
+
+.illness-container > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.illness-light{
+    background-color: red;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+}
