@@ -23,11 +23,11 @@
     align-items: center;
 }
 
-.title-logo img{
+/* .title-logo img{
     width: var(--subLogos);
     height: var(--subLogos);
     padding-right: 2px;
-}
+} */
 
 .rows{
     width: 100%;

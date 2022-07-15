@@ -1,6 +1,6 @@
 import React from 'react'
 import "./MedicalHistory.css"
-import Dropdown from "../Inputs/Dropdown"
+// import Dropdown from "../Inputs/Dropdown"
 
 export default function MedicalHistory() {
     const [optionSelected, updateOpcionSelected] = React.useState("Illness")
@@ -17,7 +17,7 @@ export default function MedicalHistory() {
 
             <section className="rows">
                 <div className="first-row">
-                    <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
+                    {/* <Dropdown data={optionsData} updateData={updateOpcionSelected}/> */}
                     <button className="classic-button">Tap to add an illness</button>
                     <IllnessContainer/>
                 </div>
