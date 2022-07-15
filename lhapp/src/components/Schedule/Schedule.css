@@ -1,0 +1,27 @@
+.schedile-view {
+    width: 90%;
+    margin: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.schedile-view .title-logo{
+    background-color: var(--mhColor);
+    width: var(--titleLogo);
+    height: var(--titleLogo);
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.schedile-view .title-logo{
+    background-color: var(--scheduleColor);
+}
+
+.schedile-view .title-logo img{
+    width: var(--subLogos);
+    height: var(--subLogos);
+    padding-right: 2px;
+}

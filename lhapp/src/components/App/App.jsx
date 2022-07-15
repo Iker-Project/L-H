@@ -6,8 +6,9 @@ import * as config from "../../config"
 import "./App.css"
 import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
-import MedicalHistory from "../MedicalHistory/MedicalHistory";
 import Welcome from "../Welcome/Welcome"
+import MedicalHistory from "../MedicalHistory/MedicalHistory";
+import Schedule from "../Schedule/Schedule";
 import SignUp from "../SignUp/SignUp"
 
 
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="/Home/*" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} >
                 <Route path={"1"} element={<Home data={data} setData={setData}/>} />
                 <Route path={"2"} element={<MedicalHistory/>}/>
+                <Route path={"3"} element={<Schedule/>}/>
               </Route>
             </Routes>
           </div>
