@@ -25,3 +25,58 @@
     height: var(--subLogos);
     padding-right: 2px;
 }
+
+/* Schedule Tab */
+
+.schedule-block{
+    cursor: pointer;
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border_radius);
+    margin: 10px 0;
+}
+
+.schedule-container{
+    margin: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-container {
+    width: 90px;
+    height: 90px;
+    background: var(--gray3);
+    margin-right: 10px;
+    border-radius: var(--border_radius);
+}
+
+.logo-container img{
+    width: inherit;
+}
+
+/* Schedule Information Window */
+
+.schedule-content{
+    padding: 10px 20px;
+}
+
+.schedule-content > div{
+    width: 100%;
+}
+
+.schedule-content div{
+    margin-bottom: 20px;
+}
+
+.schedule-content h3 {
+    margin: 5px 0;
+}
+
+.map-section{
+    cursor: pointer;
+    height: 45vh;
+    background: var(--gray2);
+    border-radius: var(--border_radius);
+    margin: 15px 0px;
+}

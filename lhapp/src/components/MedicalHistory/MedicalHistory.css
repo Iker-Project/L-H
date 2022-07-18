@@ -37,11 +37,11 @@
 }
 
 .first-row{
-    width: 60%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15px 125px 15px 0;
+    margin: 15px 100px 15px 0;
 }
 
 .second-row{
