@@ -1,10 +1,28 @@
 import React from 'react'
+import {GoogleMap, useLoadScript, Marker, DirectionsRenderer} from "@react-google-maps/api"
+import {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+import mapStyles from "./mapStyles"
+
 import "./Schedule.css"
 import Dropdown from "../Inputs/Dropdown"
 
 export default function Schedule() {
     const optionsData = ["Appointments", "Medicine"]
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
+    const [currentPos, updateCurrentPos] = React.useState(null)
+
+    React.useEffect(() => {
+        if (navigator.geolocation) {
+	    	navigator.geolocation.getCurrentPosition(showPosition);
+	  	} else {
+	    	console.log("Geolocation is not supported by this browser.");
+	  	}
+
+        function showPosition(position) {
+            const coords = {lat: position.coords.latitude, lng: position.coords.longitude}
+            updateCurrentPos(coords)
+        }
+    }, [])
 
     return (
         <div className="schedile-view">
@@ -22,7 +40,7 @@ export default function Schedule() {
                     <AppointmentTab/>
                 </div>
                 <div className="second-row">
-                    <AppointmentInformation/>
+                    <AppointmentInformation currentPos={currentPos}/>
                 </div>
             </section>
         </div>
@@ -46,7 +64,28 @@ export function AppointmentTab(){
     )
 }
 
-export function AppointmentInformation(){
+export function AppointmentInformation({currentPos}){
+    const [directions, updateDirections] = React.useState(null)
+
+    const GetDirections = () =>{
+        const directionsService = new window.google.maps.DirectionsService();
+
+        directionsService.route(
+          {
+            origin: currentPos,
+            destination: {lat: 40.72, lng: -74.002}, // ONLY TESTING
+            travelMode: window.google.maps.TravelMode.DRIVING
+          },
+          (result, status) => {
+            if (status === window.google.maps.DirectionsStatus.OK) {
+              updateDirections(result)
+            } else {
+              console.error(`error fetching directions ${result}`);
+            }
+          }
+        );
+      }
+
     return(
         <div className="schedule-info">
             <h2>Appointment Selected</h2>
@@ -61,11 +100,51 @@ export function AppointmentInformation(){
                         <p>Hacker Way 1, Menlo Park</p>
                     </div>
                     <div className="map-section">
-
+                        <Map directions={directions} />
+                        <div className="map-buttons">
+                            <button className="classic-button" onClick={() => GetDirections()}>Get Directions</button>
+                            <button className="classic-button">Open In...</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    )
+}
+
+export function Map({directions}){
+    const [ libraries ] = React.useState(['places']);
+
+    const {isLoaded, loadError} = useLoadScript({
+        googleMapsApiKey: "AIzaSyBZ-L6y4RM_Adga1qdKEj8ZTMCBkMHE_3o",
+        libraries
+    })
+
+    const mapContainerStyle = {
+        width: '100%',
+        height: "100%",
+        borderRadius: '10px',
+    }
+
+    const options = {
+        styles: mapStyles,
+        disableDefaultUI: true,
+        zoomControl: true,
+        // scrollwheel: false,
+        // gestureHandling: 'none'
+    }
+
+    return(
+        isLoaded &&
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={15.5}
+            center={{lat: 40.72, lng: -74.002}} // ONLY TESTING
+            options={options}>
+            <Marker position={{lat: 40.72, lng: -74.002}} /> // ONLY TESTING
+            {directions && <DirectionsRenderer
+                directions={directions}/>}
+        </GoogleMap>
     )
 }
 
