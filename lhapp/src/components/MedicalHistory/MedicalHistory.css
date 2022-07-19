@@ -1,0 +1,137 @@
+.medical-history {
+    width: 100%;
+    margin: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.medical-history .title-logo{
+    background-color: var(--mhColor);
+    width: var(--titleLogo);
+    height: var(--titleLogo);
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.medical-history .title-logo img{
+    width: var(--subLogos);
+    height: var(--subLogos);
+    padding-right: 2px;
+}
+
+.rows{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.first-row{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 100px 15px 0;
+}
+
+.second-row{
+    width: 100%;
+}
+
+.second-row h2{
+    margin: 15px 0;
+}
+
+/* Illness Container */
+
+.illness-block{
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border_radius);
+    margin: 10px 0;
+}
+
+.illness-container{
+    margin: 12px;
+}
+
+.illness-container > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.illness-light{
+    background-color: red;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.illness-content{
+    padding: 10px 20px;
+}
+
+.illness-content div:first-child{
+    margin-bottom: 20px;
+}
+
+.illness-content h3 {
+    margin: 5px 0;
+}
+
+.illness-content > div:last-child{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 25%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Add Illness Window */
+
+.addIllness-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.addIllness-form input{
+    border-style: none;
+    margin: 5px 0;
+    height: 25px;
+    width: 97%;
+    border-radius: 10px;
+    padding: 8px 5px;
+    box-shadow: 0 0 0 1.5pt var(--gray2);
+    font-size: var(--mFont);
+}
+
+.addIllness-form textarea{
+    border-style: none;
+    margin: 10px 0;
+    height: 300px;
+    width: 97%;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 0 0 1.5pt var(--gray2);
+    font-size: var(--sFont);
+    resize: none;
+}
+
+.addIllness-form button{
+    width: 80%;
+    margin-top: 15px;
+}

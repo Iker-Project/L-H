@@ -5,6 +5,7 @@ import "./SignUp.css"
 import * as config from '../../config'
 import PasswordMeter from './PasswordMeter'
 import PopUp from "../PopUp/PopUp"
+import Dropdown from "../Inputs/Dropdown"
 
 export default function SignUp({ handleLogin }){
     const [popUp, updatePopUp] = React.useState(false)
@@ -17,6 +18,7 @@ export default function SignUp({ handleLogin }){
 
     const [birthday, updateBirthday] = React.useState("");
     const [sex, updateSex] = React.useState("Sex:")
+    const sexData = ["Male", "Female", "Other"]
 
     const onChangeDate = (e) => {
         const newDate = e.target.value;
@@ -79,7 +81,9 @@ export default function SignUp({ handleLogin }){
                         <PasswordMeter password={password} updatePassword={updatePassword} updateValidPassword={updateValidPassword}/>
                         <div>
                             <input type="date" onChange={(e) => onChangeDate(e)}/>
-                            <InputOption sex={sex} updateSex={updateSex}/>
+                            <div className="dropdown-container">
+                                <Dropdown data={sexData} updateData={updateSex}/>
+                            </div>
                         </div>
                         <button type="submit">Next</button>
                     </form>
@@ -87,38 +91,5 @@ export default function SignUp({ handleLogin }){
             </div>
             {popUp ? <PopUp title={"Plase use another password"} description={"Your password is not strong enough, remember to use at least one special character, number and a Uppercase letter."} closeFunc={updatePopUp}/> : ""}
         </div>
-    )
-}
-
-export function InputOption({sex, updateSex}){
-    const [openMenu, openMenuFunc] = React.useState(false)
-    function handleDrowdown(){
-        openMenuFunc(!openMenu)
-    }
-
-    function handleCategory(category){
-        openMenuFunc(!openMenu)
-        updateSex(category)
-    }
-
-    return(
-        <div className="input">
-            <div className="dropdown-button" role="button" onClick={handleDrowdown}>
-                <img src="../../../img/arrow_black.png" alt="V" className={`arrowMenu ${openMenu ? "active" : ""}`}/>
-                <span>{sex}</span>
-            </div>
-            <DropdownMenu openMenu={openMenu} updateSex={handleCategory}/>
-        </div>
-    )
-}
-
-export function DropdownMenu({openMenu, updateSex}){
-    const listClass = openMenu ? "active" : ""
-
-    return(
-        <ul className={`dropdown-menu ${listClass}`}>
-            <li onClick={() => updateSex("Male")}>Male</li>
-            <li onClick={() => updateSex("Female")}>Female</li>
-        </ul>
     )
 }
