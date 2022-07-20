@@ -9,6 +9,7 @@ import Home from "../Home/Home"
 import Welcome from "../Welcome/Welcome"
 import MedicalHistory from "../MedicalHistory/MedicalHistory";
 import Schedule from "../Schedule/Schedule";
+import FirstAids from "../FirstAids/FirstAids";
 import SignUp from "../SignUp/SignUp"
 
 
@@ -66,6 +67,7 @@ export default function App() {
                 <Route path={"1"} element={<Home data={data} setData={setData}/>} />
                 <Route path={"2"} element={<MedicalHistory/>}/>
                 <Route path={"3"} element={<Schedule/>}/>
+                <Route path={"4"} element={<FirstAids/>}/>
               </Route>
             </Routes>
           </div>

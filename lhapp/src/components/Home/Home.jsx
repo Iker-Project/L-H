@@ -22,7 +22,6 @@ export default function Home({data, setData}) {
                     <img src="../../../img/AppIcon.png" alt="Home" />
                 </div>
                 <h1>Home</h1>
-                {/* <button onClick={() => updateEditMode(!editMode)}></button> */}
             </div>
 
             <PersonalInfo data={data.logginUserData}/>

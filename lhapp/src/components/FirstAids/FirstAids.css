@@ -1,0 +1,84 @@
+.first-aids {
+    width: 100%;
+    margin: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.first-aids .title-logo{
+    background-color: var(--faColor);
+    width: var(--titleLogo);
+    height: var(--titleLogo);
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.first-aids .title-logo img{
+    width: var(--subLogos);
+    height: var(--subLogos);
+    padding-right: 0;
+}
+
+/* Aid Tab */
+
+.aid-tab{
+    width: 100%;
+    cursor: pointer;
+    background: white;
+    border-radius: var(--border_radius);
+}
+
+.aidtab-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.aidtab-container > div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--gray3);
+    margin: 10px;
+    border-radius: var(--border_radius);
+}
+
+.aidtab-container img{
+    width: 60px;
+    height: 60px;
+}
+
+/* Aid Information */
+
+.firstaid-info{
+    width: 100%;
+}
+
+.firstaid-block{
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border_radius);
+}
+
+.firstaid-container{
+    width: 100%;
+    margin: 0 20px;
+    padding: 10px 0;
+}
+
+.firstaid-container > div span{
+    width: 100%;
+    display: inline-block;
+    font-size: var(--mFont);
+    margin-top: 5px;
+}
