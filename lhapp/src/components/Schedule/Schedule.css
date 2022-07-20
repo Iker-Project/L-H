@@ -6,6 +6,18 @@
     align-items: center;
 }
 
+.schedile-view .title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.schedile-view .title > div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .schedile-view .title-logo{
     background-color: var(--mhColor);
     width: var(--titleLogo);
@@ -63,15 +75,71 @@
 
 .schedule-content > div{
     width: 100%;
-}
-
-.schedule-content div{
     margin-bottom: 20px;
 }
 
 .schedule-content h3 {
     margin: 5px 0;
 }
+
+.schedule-content .add-dates{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.schedule-content .add-dates > div{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-content .add-dates > span{
+    width: 40px;
+}
+
+.schedule-content .add-address > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.schedule-content .add-address > div span{
+    width: 40px;
+}
+
+.schedule-content .add-time > div{
+    display: flex;
+    flex-direction: row;
+}
+
+.schedule-content .add-time > div span{
+    width: 40px;
+}
+
+.schedule-content .add-prescription > div{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.schedule-content .add-prescription > div h3{
+    width: 100px;
+    font-weight: normal;
+    font-size: var(--mFont);
+}
+
+.schedule-content .add-prescription > div input{
+    margin: 5px 25px;
+    width: 15%;
+}
+
+.add-prescription .prescription-dropdown{
+    width: 150px;
+}
+
+
+/* Map Style */
 
 .map-section{
     position: relative;

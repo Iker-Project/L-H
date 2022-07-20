@@ -5,6 +5,7 @@ import mapStyles from "./mapStyles"
 
 import "./Schedule.css"
 import Dropdown from "../Inputs/Dropdown"
+import Slider from "../Inputs/Slider"
 
 export default function Schedule() {
     const optionsData = ["Appointments", "Medicine"]
@@ -27,10 +28,14 @@ export default function Schedule() {
     return (
         <div className="schedile-view">
             <div className="title">
-                <div className="title-logo">
-                    <img src="../../../img/scheduleIcon.png" alt="Schedule" />
+                <div>
+                    <div className="title-logo">
+                        <img src="../../../img/scheduleIcon.png" alt="Schedule" />
+                    </div>
+                    <h1>Schedule</h1>
                 </div>
-                <h1>Schedule</h1>
+
+                <Slider/>
             </div>
 
             <section className="rows">
@@ -112,6 +117,45 @@ export function AppointmentInformation({currentPos}){
     )
 }
 
+export function AddAppointment(){
+    return(
+        <div className="schedule-info">
+            <h2>Add New Appointment</h2>
+            <div className="schedule-block">
+                <div className="schedule-content">
+                    <div>
+                        <h3>Subject:</h3>
+                        <input type="text" placeholder="Appoinment name" className="classic-input"/>
+                    </div>
+                    <div className="add-dates">
+                        <div>
+                            <h3>Start Date:</h3>
+                            <input type="date" className="classic-input"/>
+                        </div>
+                        <span></span>
+                        <div>
+                            <h3>End Date:</h3>
+                            <input type="date" className="classic-input"/>
+                        </div>
+                    </div>
+                    <div className="add-address">
+                        <h3>Address:</h3>
+                        <input type="text" placeholder="Street" className="classic-input"/>
+                        <div>
+                            <input type="text" placeholder="Zip Code" className="classic-input"/>
+                            <span></span>
+                            <input type="text" placeholder="City" className="classic-input"/>
+                        </div>
+                        <input type="text" placeholder="State" className="classic-input"/>
+                        <input type="text" placeholder="Country" className="classic-input"/>
+                    </div>
+                    <button className="classic-button"> Add Appointment</button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export function Map({directions}){
     const [ libraries ] = React.useState(['places']);
 
@@ -130,8 +174,6 @@ export function Map({directions}){
         styles: mapStyles,
         disableDefaultUI: true,
         zoomControl: true,
-        // scrollwheel: false,
-        // gestureHandling: 'none'
     }
 
     return(
@@ -183,6 +225,54 @@ export function MedicineInformation(){
                         <h3>Prescription:</h3>
                         <p>Prescription...</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export function AddMedicine(){
+    const optionsData = ["Tab(s)", "ML", "Drop(s)"]
+    const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
+
+    return(
+        <div className="schedule-info">
+            <h2>Add New Medicine</h2>
+            <div className="schedule-block">
+                <div className="schedule-content">
+                    <div>
+                        <input type="text" placeholder="Medicine name" className="classic-input"/>
+                    </div>
+                    <div className="add-time">
+                            <h3>Start Date:</h3>
+                        <div>
+                            <input type="date" className="classic-input"/>
+                            <span></span>
+                            <input type="time" className="classic-input"/>
+                        </div>
+                    </div>
+                    <div className="add-prescription">
+                        <h3>Prescription:</h3>
+                        <div>
+                            <h3>Take:</h3>
+                            <input type="text" className="classic-input"/>
+                            <span></span>
+                            <div className="prescription-dropdown">
+                                <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Each:</h3>
+                            <input type="text" className="classic-input"/>
+                            <h3>Hours</h3>
+                        </div>
+                        <div>
+                            <h3>For:</h3>
+                            <input type="text" className="classic-input"/>
+                            <h3>Days</h3>
+                        </div>
+                    </div>
+                    <button className="classic-button"> Add Appointment</button>
                 </div>
             </div>
         </div>
