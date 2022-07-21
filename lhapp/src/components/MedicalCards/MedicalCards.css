@@ -1,0 +1,192 @@
+.medical-cards {
+    width: 100%;
+    margin: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.medical-cards .title-logo{
+    background-color: var(--mcColor);
+    width: var(--titleLogo);
+    height: var(--titleLogo);
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.medical-cards .title-logo img{
+    width: var(--subLogos);
+    height: var(--subLogos);
+    padding-right: 0;
+}
+
+/* Medical Card */
+
+.medical-card {
+    width: 100%;
+    background: white;
+    border-radius: var(--border_radius);
+    margin-top: 10px;
+}
+
+.medical-card .medicalcard-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.medical-card .medicalcard-container > div:first-child{
+    background: gray;
+    margin: 10px;
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+.card-icon{
+    width: 60px;
+    height: 60px;
+}
+
+/* Medical Card Info */
+
+.medicalcard-info{
+    width: 100%;
+}
+
+.medicalcard-block{
+    margin-top: 78px;
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border_radius);
+}
+
+.medicalcard-info .medicalcard-container{
+    width: 100%;
+    margin: 0 15px;
+    padding: 15px 0;
+}
+
+.medicalcard-rowsection{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.medicalcard-header{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.img-container {
+    background: gray;
+    border-radius: var(--border_radius);
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.medicalcard-info .medicalcard-container span{
+    font-size: var(--mFont);
+}
+
+.icon{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.medicalcard-address{
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.medicalcard-address p{
+    font-weight: normal;
+}
+
+/* Create Medical Card */
+
+.medicalcard-create{
+    width: 100%;
+}
+
+.medicalcard-create .medicalcard-block{
+    margin-top: 78px;
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border_radius);
+}
+
+.medicalcard-create .medicalcard-container{
+    padding: 15px;
+    width: 95%;
+}
+
+.column-space{
+    display: block;
+    height: 15px;
+}
+
+.medicalcard-create .medicalcard-container > input:first-child{
+    margin-top: 0;
+}
+
+.medicalcard-phone{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.medicalcard-phone > button{
+    border-style: none;
+    width: 45px;
+    height: 45px;
+    border-radius: var(--border_radius);
+    background: var(--faColor);
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: var(--mFont);
+    color: white;
+}
+
+.medicalcard-container .add-dates{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.medicalcard-container .add-dates > div{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.medicalcard-container .add-dates > span{
+    width: 40px;
+}
+
+.medicalcard-container .add-address > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.medicalcard-container .add-address > div span{
+    width: 40px;
+}

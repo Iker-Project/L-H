@@ -10,6 +10,7 @@ import Welcome from "../Welcome/Welcome"
 import MedicalHistory from "../MedicalHistory/MedicalHistory";
 import Schedule from "../Schedule/Schedule";
 import FirstAids from "../FirstAids/FirstAids";
+import MedicalCards from "../MedicalCards/MedicalCards";
 import SignUp from "../SignUp/SignUp"
 
 
@@ -68,6 +69,7 @@ export default function App() {
                 <Route path={"2"} element={<MedicalHistory/>}/>
                 <Route path={"3"} element={<Schedule/>}/>
                 <Route path={"4"} element={<FirstAids/>}/>
+                <Route path={"5"} element={<MedicalCards/>}/>
               </Route>
             </Routes>
           </div>
