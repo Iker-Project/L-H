@@ -37,6 +37,7 @@ export default function Sidebar({handleLogout}) {
                 <li onClick={() => handlerChangeView(3)}><div className={`scheduleIcon ${opcSelected === 3 ? "active" : ""}`}><img src="../../../img/scheduleIcon.png" alt="schedule" /></div><span>Schedule</span></li>
                 <li onClick={() => handlerChangeView(4)}><div className={`faIcon ${opcSelected === 4 ? "active" : ""}`}><img src="../../../img/faIcon.png" alt="first aids" /></div><span>First Aids</span></li>
                 <li onClick={() => handlerChangeView(5)}><div className={`mcIcon ${opcSelected === 5 ? "active" : ""}`}><img src="../../../img/mcIcon.png" alt="Medical cards" /></div><span>Medical Cards</span></li>
+                <li onClick={() => handlerChangeView(6)}><div className={`expIcon ${opcSelected === 6 ? "active" : ""}`}><img src="../../../img/expIcon.png" alt="Medical cards" /></div><span>Explore</span></li>
                 <li onClick={handlerShowAlert}><div className={`loIcon ${opcSelected === 5 ? "active" : ""}`}><img src="../../../img/LogoutIcon.png" alt="Log out" /></div><span>Log Out</span></li>
             </ul>
             {showAlert ? <AlertWindow title={"You are Logging Out..."} cancelFunc={() => {updateShowAlert(false)}} acceptFunc={() => handlerLogOutNav()}/> : ""}
