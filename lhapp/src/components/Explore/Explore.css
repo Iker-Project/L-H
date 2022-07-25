@@ -47,12 +47,35 @@
     cursor: pointer;
 }
 
+.phone-number {
+    font-size: 24px;
+    text-decoration: underline;
+    margin-top: 15px;
+}
+
 .exploreinfo-block {
     margin: 10px 15px;
 }
 
 .exploreinfo-block .subtitle{
     margin: 0;
+}
+
+/* Explore Details */
+.explore-rowsection{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.explore-address{
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.medicalcard-address p{
+    font-weight: normal;
 }
 
 /* Filter Style */

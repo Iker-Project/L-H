@@ -25,6 +25,7 @@ export default function Explore() {
                     <Dropdown data={exploreOptions} updateData={updateExploreSelected}/>
                     <InfoContainer/>
                 </div>
+                <span></span>
                 <div className="second-row">
                     <ExploreDetails/>
                 </div>
@@ -49,7 +50,20 @@ export function ExploreDetails(){
         <div className="explore-container">
             <div className="exploreinfo-block">
                 <p>Name</p>
-                <h3>Address</h3>
+                <div className="explore-rowsection">
+                    <img src="" alt="phone icon" className="icon"/>
+                    <p className="phone-number">Phone Number</p>
+                </div>
+                <div className="explore-address">
+                    <h3>Address:</h3>
+                    <p>Street</p>
+                    <p>Zip Code, City, State</p>
+                    <p>Country</p>
+                </div>
+                <div className="explore-rowsection">
+                    <img src="" alt="phone icon" className="icon"/>
+                    <p>mail@email.com</p>
+                </div>
             </div>
         </div>
     )

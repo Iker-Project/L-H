@@ -57,7 +57,7 @@ export function MedicalCardInformation(){
                     </div>
                     <div className="medicalcard-rowsection">
                         <img src="" alt="phone icon" className="icon"/>
-                        <p>Phone Number</p>
+                        <p className="phone-number">Phone Number</p>
                     </div>
                     <div className="medicalcard-address">
                         <h3>Address:</h3>
