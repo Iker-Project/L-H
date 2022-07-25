@@ -60,10 +60,8 @@ export function ExploreDetails(){
                     <p>Zip Code, City, State</p>
                     <p>Country</p>
                 </div>
-                <div className="explore-rowsection">
-                    <img src="" alt="phone icon" className="icon"/>
-                    <p>mail@email.com</p>
-                </div>
+                <h3>Details:</h3>
+                <p>Details...</p>
             </div>
         </div>
     )

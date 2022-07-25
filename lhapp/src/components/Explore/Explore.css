@@ -89,6 +89,7 @@
     right: 3%;
     user-select: none;
     pointer-events: none;
+    box-shadow: 0 0 0 1.5pt var(--gray2);
 }
 
 .filter-container{
