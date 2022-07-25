@@ -25,6 +25,7 @@
   --scheduleColor: #EC0000;
   --faColor: #05E100;
   --mcColor: #00D8F5;
+  --expColor: #8317EF;
 }
 
 body{
@@ -84,7 +85,7 @@ p > span{
   border-style: none;
   margin: 5px 0;
   height: 25px;
-  width: 98%;
+  width: 100%;
   border-radius: 10px;
   padding: 8px 5px;
   box-shadow: 0 0 0 1.5pt var(--gray2);

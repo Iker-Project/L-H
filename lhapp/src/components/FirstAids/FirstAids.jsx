@@ -15,6 +15,7 @@ export default function FirstAids() {
                 <div className="first-row">
                     <AidsTab/>
                 </div>
+                <span></span>
                 <div className="second-row">
                     <FirstAidInformation/>
                 </div>

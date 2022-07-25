@@ -36,16 +36,23 @@
     align-items: flex-start;
 }
 
+.rows > span{
+    width: 20%;
+}
+
 .first-row{
     width: 75%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15px 100px 15px 0;
+    margin: 15px ;
 }
 
 .second-row{
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .second-row h2{
@@ -53,6 +60,10 @@
 }
 
 /* Illness Container */
+
+.add-illness, .illness-info{
+    width: 100%;
+}
 
 .illness-block{
     width: 100%;

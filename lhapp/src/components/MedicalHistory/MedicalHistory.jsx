@@ -21,6 +21,7 @@ export default function MedicalHistory() {
                     <button className="classic-button">Tap to add an illness</button>
                     <IllnessContainer/>
                 </div>
+                <span></span>
                 <div className="second-row">
                     {/* <IllnessInformation/> */}
                     <AddIllness/>

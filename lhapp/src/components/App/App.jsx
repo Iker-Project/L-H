@@ -4,14 +4,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useNavigate, Outlet } from "react-router-dom";
 import * as config from "../../config"
 import "./App.css"
+import Welcome from "../Welcome/Welcome"
+import SignUp from "../SignUp/SignUp"
 import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
-import Welcome from "../Welcome/Welcome"
 import MedicalHistory from "../MedicalHistory/MedicalHistory";
 import Schedule from "../Schedule/Schedule";
 import FirstAids from "../FirstAids/FirstAids";
 import MedicalCards from "../MedicalCards/MedicalCards";
-import SignUp from "../SignUp/SignUp"
+import Explore from "../Explore/Explore";
 
 
 export default function App() {
@@ -70,6 +71,7 @@ export default function App() {
                 <Route path={"3"} element={<Schedule/>}/>
                 <Route path={"4"} element={<FirstAids/>}/>
                 <Route path={"5"} element={<MedicalCards/>}/>
+                <Route path={"6"} element={<Explore/>}/>
               </Route>
             </Routes>
           </div>

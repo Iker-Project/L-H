@@ -27,7 +27,7 @@ export default function Welcome({isLoggedIn, handleLogin}) {
                 })
 
                 handleLogin(res.data.user)
-                navigate("../Home", { replace: true })
+                navigate("../Home/1", { replace: true })
             } catch (err) {
                 alert(err)
 

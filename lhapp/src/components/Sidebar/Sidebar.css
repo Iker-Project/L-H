@@ -140,7 +140,6 @@
     align-items: center;
 }
 
-
 .sidebar li > div img{
     width: var(--iconImgSize);
 }
@@ -163,6 +162,10 @@
 
 .mcIcon{
     background-color: var(--mcColor);
+}
+
+.expIcon{
+    background-color: var(--expColor);
 }
 
 .loIcon{

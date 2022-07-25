@@ -38,6 +38,10 @@
     padding-right: 2px;
 }
 
+.schedule-info {
+    width: 100%;
+}
+
 /* Schedule Tab */
 
 .schedule-block{
