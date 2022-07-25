@@ -52,13 +52,20 @@ export default function SignUp({ handleLogin }){
                         "pressure": 0,
                         "glucose": 0
                     },
-                    "medicalHistoryData": {},
-                    "scheduleData": {},
-                    "medicalCardsData": {}
+                    "medicalHistoryData": {
+                        "illnesses": [],
+                        "appointments": [],
+                        "medicine": []
+                    },
+                    "scheduleData": {
+                        "appointments": [],
+                        "medicine": []
+                    },
+                    "medicalCardsData": []
                 })
 
                 handleLogin(res.data.user)
-                window.location.href='http://localhost:3000/Home';
+                window.location.href='http://localhost:3000/Home/1';
             } catch (err) {
                 alert(err)
 

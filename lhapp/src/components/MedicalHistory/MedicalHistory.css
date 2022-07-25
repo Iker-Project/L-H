@@ -59,6 +59,14 @@
     margin: 15px 0;
 }
 
+.fit-height{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    overflow: hidden;
+}
+
 /* Illness Container */
 
 .add-illness, .illness-info{
@@ -70,9 +78,11 @@
     background-color: white;
     border-radius: var(--border_radius);
     margin: 10px 0;
+    cursor: pointer;
 }
 
 .illness-container{
+    padding: 5px 0;
     margin: 12px;
 }
 
@@ -80,6 +90,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .illness-light{
@@ -108,6 +119,10 @@
     width: 25%;
     margin-top: 20px;
     margin-bottom: 10px;
+}
+
+.illness-info .illness-block{
+    cursor:initial;
 }
 
 /* Add Illness Window */

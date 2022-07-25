@@ -67,7 +67,7 @@ export default function App() {
               <Route path="/SignUp" element={<SignUp handleLogin={handleLogin}/>}/>
               <Route path="/Home/*" element={<MainApp isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} >
                 <Route path={"1"} element={<Home data={data} setData={setData}/>} />
-                <Route path={"2"} element={<MedicalHistory/>}/>
+                <Route path={"2"} element={<MedicalHistory data={data} setData={setData}/>}/>
                 <Route path={"3"} element={<Schedule/>}/>
                 <Route path={"4"} element={<FirstAids/>}/>
                 <Route path={"5"} element={<MedicalCards/>}/>
