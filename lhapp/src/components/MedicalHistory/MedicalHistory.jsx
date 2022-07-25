@@ -33,11 +33,11 @@ export default function MedicalHistory({data, setData}) {
 
     const saveInfo = () =>{
         console.log('dataCopy: ', dataCopy);
-        setData(dataCopy)
         axios.post(`${config.API_BASE_URL}/updateData`, dataCopy.userData)
         .then(res => {
             console.log(res);
         })
+        setData({...dataCopy})
     }
 
     return (
@@ -69,7 +69,7 @@ export default function MedicalHistory({data, setData}) {
                 {
                     {
                         'Illnesses': addingIllness ?
-                            <AddIllness data={dataCopy.userData.medicalHistoryData} setData={setData} saveInfo={saveInfo}/>
+                            <AddIllness data={dataCopy.userData.medicalHistoryData} saveInfo={saveInfo}/>
                             : illnessSelected ? <IllnessInformation data={illnessSelected}/> : <div className="fit-height"><h3>Select an Illness.</h3></div>,
                         'Appointments': appointmentSelected ? <AppointmentInformation /> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
                         'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
@@ -138,7 +138,7 @@ export function IllnessInformation({data}){
     )
 }
 
-export function AddIllness({data, setData, saveInfo}){
+export function AddIllness({data, saveInfo}){
     const [name, updateName] = React.useState("")
     const [date, updateDate] = React.useState("");
     const [description, updateDescription] = React.useState("")
@@ -154,6 +154,10 @@ export function AddIllness({data, setData, saveInfo}){
         }
         data.illnesses = [...data.illnesses, illnessObj]
         saveInfo()
+
+        updateName("")
+        updateDate("")
+        updateDescription("")
     }
 
     const createID = () => {
@@ -168,9 +172,9 @@ export function AddIllness({data, setData, saveInfo}){
             <div className="illness-block">
                 <div className="addIllness-container">
                     <form action="" className="addIllness-form">
-                        <input type="text" placeholder="Illness name" onChange={(e) => updateName(e.target.value)}/>
-                        <input type="datetime-local" onChange={(e) => updateDate(e.target.value)}/>
-                        <textarea name="" placeholder="Illness description..." id="" cols="30" rows="10" onChange={(e) => updateDescription(e.target.value)}></textarea>
+                        <input type="text" placeholder="Illness name" value={name} onChange={(e) => updateName(e.target.value)}/>
+                        <input type="datetime-local" value={date} onChange={(e) => updateDate(e.target.value)}/>
+                        <textarea placeholder="Illness description..." value={description} cols="30" rows="10" onChange={(e) => updateDescription(e.target.value)}></textarea>
                         <button onClick={(e) => saveIllness(e)} type="submit" className="classic-button">Add</button>
                     </form>
                 </div>
