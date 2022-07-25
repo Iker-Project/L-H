@@ -10,11 +10,26 @@ export default function MedicalHistory({data, setData}) {
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
 
     const [addingIllness, updateAddingIllness] = React.useState(false)
+    const [deleteMode, updateDelteMode] = React.useState(false)
     const [illnessSelected, updateIllnessSelected] = React.useState(null)
     const [appointmentSelected, updateAppointmentSelected] = React.useState(null)
     const [medicineSelected, updateMedicineSelected] = React.useState(null)
 
     var dataCopy = data
+
+    const handleDeleteButton = (id) => {
+        updateDelteMode(!deleteMode)
+        updateIllnessSelected(null)
+
+        if (id){
+            const indexOfObject = dataCopy.userData.medicalHistoryData.illnesses.findIndex(illness => {
+                return illness.id === id;
+            });
+            dataCopy.userData.medicalHistoryData.illnesses.splice(indexOfObject, 1);
+
+            saveInfo()
+        }
+    }
 
     const saveInfo = () =>{
         console.log('dataCopy: ', dataCopy);
@@ -39,7 +54,7 @@ export default function MedicalHistory({data, setData}) {
                     <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
                     {
                         {
-                            'Illnesses': <IllnessManager addingIllness={addingIllness} updateAddingIllness={updateAddingIllness} data={dataCopy.userData.medicalHistoryData.illnesses} updateIllnessSelected={updateIllnessSelected}/>,
+                            'Illnesses': <IllnessManager updateAddingIllness={updateAddingIllness} data={dataCopy.userData.medicalHistoryData.illnesses} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
                             'Appointments': dataCopy.userData.medicalHistoryData.appointments.length != 0 ?
                                 <AppointmentTab /> :
                                 <div className="fit-height"><h3>No appointments archived here.</h3></div>,
@@ -53,7 +68,6 @@ export default function MedicalHistory({data, setData}) {
                 <div className="second-row">
                 {
                     {
-                        // 'Illnesses': ,
                         'Illnesses': addingIllness ?
                             <AddIllness data={dataCopy.userData.medicalHistoryData} setData={setData} saveInfo={saveInfo}/>
                             : illnessSelected ? <IllnessInformation data={illnessSelected}/> : <div className="fit-height"><h3>Select an Illness.</h3></div>,
@@ -67,25 +81,32 @@ export default function MedicalHistory({data, setData}) {
     )
 }
 
-export function IllnessManager({addingIllness, updateAddingIllness, data, updateIllnessSelected}){
+export function IllnessManager({updateAddingIllness, data, updateIllnessSelected, deleteMode, handleDeleteButton}){
     return(
         <div style={{width: "100%", height: "auto"}}>
-            <button className="classic-button" onClick={() => updateAddingIllness(!addingIllness)}>Tap to add an illness</button>
+            <div className="addDelete-button">
+                <button className="classic-button" onClick={() => updateAddingIllness(true)}>Tap to add an illness</button>
+                <span></span>
+                <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
+            </div>
             {data.length != 0 ? data.map((illness) => {
-                return <IllnessContainer key={illness.id} updateAddingIllness={updateAddingIllness} illness={illness} updateIllnessSelected={updateIllnessSelected}/>
+                return <IllnessContainer key={illness.id} updateAddingIllness={updateAddingIllness} illness={illness} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
             })
             : <div className="fit-height"><h3>No illnesses registered.</h3></div>}
         </div>
     )
 }
 
-export function IllnessContainer({updateAddingIllness, illness, updateIllnessSelected}){
+export function IllnessContainer({updateAddingIllness, illness, updateIllnessSelected, deleteMode, handleDeleteButton}){
     return(
         <div className="illness-block" onClick={() => {updateAddingIllness(false); updateIllnessSelected(illness)}}>
             <div className="illness-container">
-                <div>
-                    <p>{illness.name}</p>
-                    <div className="illness-light"></div>
+                <div className="illness-title">
+                    <div style={{display: "flex", alignItems: "center"}}>
+                        <div className="illness-light"></div>
+                        <p>{illness.name}</p>
+                    </div>
+                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.id)}}><img src="" alt="delete button" /></button>}
                 </div>
                 <h3>{illness.date}</h3>
             </div>
