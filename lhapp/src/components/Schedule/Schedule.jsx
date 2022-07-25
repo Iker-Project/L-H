@@ -44,6 +44,7 @@ export default function Schedule() {
                     <button className="classic-button">Tap to add an appointment</button>
                     <AppointmentTab/>
                 </div>
+                <span></span>
                 <div className="second-row">
                     <AppointmentInformation currentPos={currentPos}/>
                 </div>

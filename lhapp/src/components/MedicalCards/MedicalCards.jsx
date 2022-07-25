@@ -16,6 +16,7 @@ export default function MedicalCards() {
                     <button className="classic-button">Add new Medical Card</button>
                     <MedicalCard/>
                 </div>
+                <span></span>
                 <div className="second-row">
                     <CreateMedicalCard/>
                 </div>
