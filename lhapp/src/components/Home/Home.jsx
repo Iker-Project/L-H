@@ -9,7 +9,7 @@ export default function Home({data, setData}) {
     const saveInfo = () =>{
         console.log('dataCopy: ', dataCopy);
         setData(dataCopy)
-        axios.post(`${config.API_BASE_URL}/createData`, dataCopy.userData)
+        axios.post(`${config.API_BASE_URL}/updateData`, dataCopy.userData)
         .then(res => {
             console.log(res);
         })

@@ -59,6 +59,43 @@
     margin: 15px 0;
 }
 
+.fit-height{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    overflow: hidden;
+}
+
+/* Input Manager */
+
+.addDelete-button{
+    display: flex;
+    flex-direction: row;
+}
+
+.addDelete-button span{
+    width: 25px;
+}
+
+.delete-button{
+    width: 55px;
+    height: 50px;
+    border-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--border_radius);
+    cursor: pointer;
+}
+
+.delete-button:active{
+    background: gray;
+}
+
+.delete-button.active{
+    background: red;
+}
+
 /* Illness Container */
 
 .add-illness, .illness-info{
@@ -70,23 +107,27 @@
     background-color: white;
     border-radius: var(--border_radius);
     margin: 10px 0;
+    cursor: pointer;
 }
 
 .illness-container{
+    padding: 5px 0;
     margin: 12px;
 }
 
-.illness-container > div{
+.illness-title{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .illness-light{
     background-color: red;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 8px;
+    margin-right: 10px;
 }
 
 .illness-content{
@@ -108,6 +149,18 @@
     width: 25%;
     margin-top: 20px;
     margin-bottom: 10px;
+}
+
+.illness-title button{
+    border-style: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: red;
+}
+
+.illness-info .illness-block{
+    cursor:initial;
 }
 
 /* Add Illness Window */
