@@ -173,8 +173,12 @@ export function AppointmentInformation({data, currentPos}){
             <div className="schedule-block">
                 <div className="schedule-content">
                     <div>
-                        <h3>Date:</h3>
+                        <h3>Start Date:</h3>
                         <p>{data.date}, <span>at</span> {data.hour}</p>
+                    </div>
+                    <div>
+                        <h3>End Date:</h3>
+                        <p>{data.endDate}, <span>at</span> {data.endHour}</p>
                     </div>
                     <div>
                         <h3>Address:</h3>
@@ -193,7 +197,17 @@ export function AppointmentInformation({data, currentPos}){
     )
 }
 
-export function AddAppointment(){
+export function AddAppointment({saveInfo}){
+    const [name, updateName] = React.useState("")
+    const [date, updateDate] = React.useState("")
+    const [endDate, updateEndDate] = React.useState("")
+    const [hout, updateHour] = React.useState("")
+    const [street, updateStreet] = React.useState("")
+    const [zipCode, updateZipCode] = React.useState("")
+    const [city, updateCity] = React.useState("")
+    const [state, updateState] = React.useState("")
+    const [country, updateCountry] = React.useState("")
+
     return(
         <div className="schedule-info">
             <h2>Add New Appointment</h2>
@@ -206,12 +220,12 @@ export function AddAppointment(){
                     <div className="add-dates">
                         <div>
                             <h3>Start Date:</h3>
-                            <input type="date" className="classic-input"/>
+                            <input type="datetime-local" className="classic-input"/>
                         </div>
                         <span></span>
                         <div>
                             <h3>End Date:</h3>
-                            <input type="date" className="classic-input"/>
+                            <input type="datetime-local" className="classic-input"/>
                         </div>
                     </div>
                     <div className="add-address">
