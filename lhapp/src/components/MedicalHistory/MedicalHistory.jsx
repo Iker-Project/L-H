@@ -6,6 +6,8 @@ import axios from "axios"
 import { AppointmentInformation, AppointmentTab, MedicineInformation, MedicineTab } from '../Schedule/Schedule'
 
 export default function MedicalHistory({data, setData}) {
+    const [dataIllnesses, setIllnesses] = React.useState({})
+
     const optionsData = ["Illnesses", "Appointments", "Medicine"]
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
 
@@ -15,30 +17,40 @@ export default function MedicalHistory({data, setData}) {
     const [appointmentSelected, updateAppointmentSelected] = React.useState(null)
     const [medicineSelected, updateMedicineSelected] = React.useState(null)
 
-    var dataCopy = data
-
-    const handleDeleteButton = (id) => {
+    const handleDeleteButton = ( async (id) => {
         updateDelteMode(!deleteMode)
         updateIllnessSelected(null)
 
         if (id){
-            const indexOfObject = dataCopy.userData.medicalHistoryData.illnesses.findIndex(illness => {
-                return illness.id === id;
-            });
-            dataCopy.userData.medicalHistoryData.illnesses.splice(indexOfObject, 1);
-
-            saveInfo()
+            axios.post(`${config.API_BASE_URL}/deleteIllnesses/${id}`)
+            .then(res => {
+                console.log(res);
+            })
+            let newDataList = dataIllnesses.filter(illness => illness.objectId != id);
+            setIllnesses([...newDataList])
         }
-    }
+    })
 
-    const saveInfo = () =>{
-        console.log('dataCopy: ', dataCopy);
-        axios.post(`${config.API_BASE_URL}/updateData`, dataCopy.userData)
+    const saveInfo = (illnessObj) =>{
+        setIllnesses([...dataIllnesses, illnessObj])
+        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
         .then(res => {
             console.log(res);
         })
-        setData({...dataCopy})
     }
+
+    React.useEffect(() => {
+        const fetchUserData = (async () => {
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/illnesses`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setIllnesses(response.data)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
+          })()
+    },[])
 
     return (
         <div className="medical-history">
@@ -54,11 +66,11 @@ export default function MedicalHistory({data, setData}) {
                     <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
                     {
                         {
-                            'Illnesses': <IllnessManager updateAddingIllness={updateAddingIllness} data={dataCopy.userData.medicalHistoryData.illnesses} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
-                            'Appointments': dataCopy.userData.medicalHistoryData.appointments.length != 0 ?
+                            'Illnesses': <IllnessManager updateAddingIllness={updateAddingIllness} data={dataIllnesses} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
+                            'Appointments': false ?
                                 <AppointmentTab /> :
                                 <div className="fit-height"><h3>No appointments archived here.</h3></div>,
-                            'Medicine':  dataCopy.userData.medicalHistoryData.medicine.length != 0 ?
+                            'Medicine':  false ?
                                 <MedicineTab /> :
                                 <div className="fit-height"><h3>No medicine archived here.</h3></div>
                         }[optionSelected]
@@ -69,7 +81,7 @@ export default function MedicalHistory({data, setData}) {
                 {
                     {
                         'Illnesses': addingIllness ?
-                            <AddIllness data={dataCopy.userData.medicalHistoryData} saveInfo={saveInfo}/>
+                            <AddIllness saveInfo={saveInfo}/>
                             : illnessSelected ? <IllnessInformation data={illnessSelected}/> : <div className="fit-height"><h3>Select an Illness.</h3></div>,
                         'Appointments': appointmentSelected ? <AppointmentInformation /> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
                         'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
@@ -82,6 +94,7 @@ export default function MedicalHistory({data, setData}) {
 }
 
 export function IllnessManager({updateAddingIllness, data, updateIllnessSelected, deleteMode, handleDeleteButton}){
+
     return(
         <div style={{width: "100%", height: "auto"}}>
             <div className="addDelete-button">
@@ -89,8 +102,8 @@ export function IllnessManager({updateAddingIllness, data, updateIllnessSelected
                 <span></span>
                 <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
             </div>
-            {data.length != 0 ? data.map((illness) => {
-                return <IllnessContainer key={illness.id} updateAddingIllness={updateAddingIllness} illness={illness} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+            {data.length > 0 ? data.map((illness) => {
+                return <IllnessContainer key={illness.objectId} updateAddingIllness={updateAddingIllness} illness={illness} updateIllnessSelected={updateIllnessSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
             })
             : <div className="fit-height"><h3>No illnesses registered.</h3></div>}
         </div>
@@ -104,11 +117,11 @@ export function IllnessContainer({updateAddingIllness, illness, updateIllnessSel
                 <div className="illness-title">
                     <div style={{display: "flex", alignItems: "center"}}>
                         <div className="illness-light"></div>
-                        <p>{illness.name}</p>
+                        <p>{illness.Name}</p>
                     </div>
-                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.id)}}><img src="" alt="delete button" /></button>}
+                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.objectId)}}><img src="" alt="delete button" /></button>}
                 </div>
-                <h3>{illness.date}</h3>
+                <h3>{illness.Date}</h3>
             </div>
         </div>
     )
@@ -117,16 +130,16 @@ export function IllnessContainer({updateAddingIllness, illness, updateIllnessSel
 export function IllnessInformation({data}){
     return(
         <div className="illness-info">
-            <h2>{data.name}</h2>
+            <h2>{data.Name}</h2>
             <div className="illness-block">
                 <div className="illness-content">
                     <div>
                         <h3>Date:</h3>
-                        <p>{data.date}</p>
+                        <p>{data.Date}</p>
                     </div>
                     <div>
                         <h3>Description:</h3>
-                        <p>{data.description}</p>
+                        <p>{data.Description}</p>
                     </div>
                     <div>
                         <h3>Attended:</h3>
@@ -138,22 +151,22 @@ export function IllnessInformation({data}){
     )
 }
 
-export function AddIllness({data, saveInfo}){
+export function AddIllness({saveInfo}){
     const [name, updateName] = React.useState("")
     const [date, updateDate] = React.useState("");
     const [description, updateDescription] = React.useState("")
 
-    const saveIllness = (e) => {
+    const saveIllness = async (e) => {
         e.preventDefault()
 
         const illnessObj = {
-            id: createID(),
-            name: name,
-            date: date,
-            description: description
+            userID: localStorage.getItem("current_user_id"),
+            Name: name,
+            Date: date,
+            Description: description
         }
-        data.illnesses = [...data.illnesses, illnessObj]
-        saveInfo()
+
+        saveInfo(illnessObj)
 
         updateName("")
         updateDate("")

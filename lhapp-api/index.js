@@ -64,6 +64,35 @@ app.post('/updateData', async (req, res) => {
   }
 })
 
+app.post('/illnesses', async (req, res) => {
+  try {
+    let Illness = Parse.Object.extend("Illnesses")
+    const newIllness = new Illness();
+
+    res.status(201)
+    newIllness.save(req.body)
+    res.send(req.body)
+  }
+  catch{
+    console.log("Error")
+  }
+})
+
+app.post('/deleteIllnesses/:illnessId', async (req, res) => {
+  let illness = new Parse.Object('Illnesses')
+  illness.set('objectId', req.params.illnessId)
+
+  try {
+    await illness.destroy();
+    res.status(201)
+    res.send("Done!")
+  }
+  catch (error){
+    res.status(400)
+    res.send({"error" : "Failed to delete illness: " + error })
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
