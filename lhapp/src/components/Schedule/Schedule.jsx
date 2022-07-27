@@ -128,14 +128,16 @@ export function AppointmentTab({updateAddingAppointment, appointment, updateAppo
     return(
         <div className="schedule-block" onClick={() => {updateAddingAppointment(false); updateAppointmentSelected(appointment)}}>
             <div className="schedule-container">
-                <div className="logo-container">
+                {/* Appointment Logo - Stretch Feature */}
+                {/* <div className="logo-container">
                     <img src="" alt="Medicine Logo" />
-                </div>
+                </div> */}
                 <div>
                     <p>{appointment.name}</p>
                     <h3>{appointment.date}, <span>at</span> {appointment.hour}</h3>
                     <h3> {appointment.address}</h3>
                 </div>
+                {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(appointment.objectId)}}><img src="" alt="delete button" /></button>}
             </div>
         </div>
     )
