@@ -11,6 +11,7 @@ import Slider from "../Inputs/Slider"
 
 export default function Schedule({data, setData}) {
     const [dataAppointments, setAppointments] = React.useState({})
+    const [dataMedicine, setMedicine] = React.useState({})
 
     const optionsData = ["Appointments", "Medicine"]
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
@@ -94,9 +95,8 @@ export default function Schedule({data, setData}) {
                         {
                             'Appointments':
                                 <AppointmentManager updateAddingAppointment={updateAddingAppointment} data={dataAppointments} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
-                            'Medicine':  false ?
-                                <MedicineTab /> :
-                                <div className="fit-height"><h3>No medicine registered.</h3></div>
+                            'Medicine':
+                                <MedicineManager />
                         }[optionSelected]
                     }
                 </div>
@@ -117,6 +117,22 @@ export default function Schedule({data, setData}) {
 }
 
 export function AppointmentManager({updateAddingAppointment, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+    return(
+        <div style={{width: "100%", height: "auto"}}>
+            <div className="addDelete-button">
+                <button className="classic-button" onClick={() => updateAddingAppointment(true)}>Tap to add an appointment</button>
+                <span></span>
+                <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
+            </div>
+            {data.length > 0 ? data.map((appointment) => {
+                return <AppointmentTab key={appointment.objectId} updateAddingAppointment={updateAddingAppointment} appointment={appointment} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+            })
+            : <div className="fit-height"><h3>No appointments registered.</h3></div>}
+        </div>
+    )
+}
+
+export function MedicineManager({updateAddingAppointment, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
 
     return(
         <div style={{width: "100%", height: "auto"}}>
