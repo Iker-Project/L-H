@@ -93,6 +93,35 @@ app.post('/deleteIllnesses/:illnessId', async (req, res) => {
   }
 })
 
+app.post('/newAppointment', async (req, res) => {
+  try {
+    let Appointment = Parse.Object.extend("Illnesses")
+    const newIllness = new Appointment();
+
+    res.status(201)
+    newIllness.save(req.body)
+    res.send(req.body)
+  }
+  catch{
+    console.log("Error")
+  }
+})
+
+app.post('/deleteAppointment/:appointmentId', async (req, res) => {
+  let appointment = new Parse.Object('Illnesses')
+  appointment.set('objectId', req.params.appointmentId)
+
+  try {
+    await appointment.destroy();
+    res.status(201)
+    res.send("Done!")
+  }
+  catch (error){
+    res.status(400)
+    res.send({"error" : "Failed to delete illness: " + error })
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })

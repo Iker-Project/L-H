@@ -7,10 +7,39 @@ import "./Schedule.css"
 import Dropdown from "../Inputs/Dropdown"
 import Slider from "../Inputs/Slider"
 
-export default function Schedule() {
+export default function Schedule({data, setData}) {
+    const [dataAppointments, setAppointments] = React.useState({})
+
     const optionsData = ["Appointments", "Medicine"]
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
     const [currentPos, updateCurrentPos] = React.useState(null)
+
+    const [addingAppointment, updateAddingAppointment] = React.useState(false)
+    const [deleteMode, updateDelteMode] = React.useState(false)
+    const [appointmentSelected, updateAppointmentSelected] = React.useState(null)
+    const [medicineSelected, updateMedicineSelected] = React.useState(null)
+
+    const handleDeleteButton = ( async (id) => {
+        updateDelteMode(!deleteMode)
+        updateAppointmentSelected(null)
+
+        if (id){
+            axios.post(`${config.API_BASE_URL}/deleteIllnesses/${id}`)
+            .then(res => {
+                console.log(res);
+            })
+            let newDataList = dataAppointments.filter(appointment => appointment.objectId != id);
+            setAppointments([...newDataList])
+        }
+    })
+
+    const saveInfo = (appointmentObj) =>{
+        setIllnesses([...dataIllnesses, appointmentObj])
+        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
+        .then(res => {
+            console.log(res);
+        })
+    }
 
     React.useEffect(() => {
         if (navigator.geolocation) {
@@ -42,11 +71,25 @@ export default function Schedule() {
                 <div className="first-row">
                     <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
                     <button className="classic-button">Tap to add an appointment</button>
-                    <AppointmentTab/>
+                    {
+                        {
+                            'Appointments': false ?
+                                <AppointmentTab /> :
+                                <div className="fit-height"><h3>No appointments registered.</h3></div>,
+                            'Medicine':  false ?
+                                <MedicineTab /> :
+                                <div className="fit-height"><h3>No medicine registered.</h3></div>
+                        }[optionSelected]
+                    }
                 </div>
                 <span></span>
                 <div className="second-row">
-                    <AppointmentInformation currentPos={currentPos}/>
+                {
+                    {
+                        'Appointments': appointmentSelected ? <AppointmentInformation /> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
+                        'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
+                    }[optionSelected]
+                }
                 </div>
             </section>
         </div>
