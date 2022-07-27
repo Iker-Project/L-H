@@ -2,6 +2,8 @@ import React from 'react'
 import {GoogleMap, useLoadScript, Marker, DirectionsRenderer} from "@react-google-maps/api"
 import {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import mapStyles from "./mapStyles"
+import axios from "axios"
+import * as config from "../../config"
 
 import "./Schedule.css"
 import Dropdown from "../Inputs/Dropdown"
@@ -24,7 +26,7 @@ export default function Schedule({data, setData}) {
         updateAppointmentSelected(null)
 
         if (id){
-            axios.post(`${config.API_BASE_URL}/deleteIllnesses/${id}`)
+            axios.post(`${config.API_BASE_URL}/deleteAppointment/${id}`)
             .then(res => {
                 console.log(res);
             })
@@ -35,7 +37,7 @@ export default function Schedule({data, setData}) {
 
     const saveInfo = (appointmentObj) =>{
         setIllnesses([...dataIllnesses, appointmentObj])
-        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
+        axios.post(`${config.API_BASE_URL}/newAppointment`, dataIllnesses)
         .then(res => {
             console.log(res);
         })
@@ -52,6 +54,17 @@ export default function Schedule({data, setData}) {
             const coords = {lat: position.coords.latitude, lng: position.coords.longitude}
             updateCurrentPos(coords)
         }
+
+        const fetchUserData = (async () => {
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/appointments`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setAppointments(response.data)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
+          })()
     }, [])
 
     return (
@@ -70,12 +83,10 @@ export default function Schedule({data, setData}) {
             <section className="rows">
                 <div className="first-row">
                     <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
-                    <button className="classic-button">Tap to add an appointment</button>
                     {
                         {
-                            'Appointments': false ?
-                                <AppointmentTab /> :
-                                <div className="fit-height"><h3>No appointments registered.</h3></div>,
+                            'Appointments':
+                                <AppointmentManager updateAddingAppointment={updateAddingAppointment} data={dataAppointments} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
                             'Medicine':  false ?
                                 <MedicineTab /> :
                                 <div className="fit-height"><h3>No medicine registered.</h3></div>
@@ -96,24 +107,41 @@ export default function Schedule({data, setData}) {
     )
 }
 
-export function AppointmentTab(){
+export function AppointmentManager({updateAddingAppointment, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+
     return(
-        <div className="schedule-block">
+        <div style={{width: "100%", height: "auto"}}>
+            <div className="addDelete-button">
+                <button className="classic-button" onClick={() => updateAddingAppointment(true)}>Tap to add an appointment</button>
+                <span></span>
+                <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
+            </div>
+            {data.length > 0 ? data.map((appointment) => {
+                return <AppointmentTab key={appointment.objectId} updateAddingAppointment={updateAddingAppointment} appointment={appointment} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+            })
+            : <div className="fit-height"><h3>No appointments registered.</h3></div>}
+        </div>
+    )
+}
+
+export function AppointmentTab({updateAddingAppointment, appointment, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+    return(
+        <div className="schedule-block" onClick={() => {updateAddingAppointment(false); updateAppointmentSelected(appointment)}}>
             <div className="schedule-container">
                 <div className="logo-container">
                     <img src="" alt="Medicine Logo" />
                 </div>
                 <div>
-                    <p>Appointment name</p>
-                    <h3>November 28th, 2022, <span>at</span> 11:28 a.m.</h3>
-                    <h3><span>Address:</span> Hacker Way 1, Menlo Park</h3>
+                    <p>{appointment.name}</p>
+                    <h3>{appointment.date}, <span>at</span> {appointment.hour}</h3>
+                    <h3> {appointment.address}</h3>
                 </div>
             </div>
         </div>
     )
 }
 
-export function AppointmentInformation({currentPos}){
+export function AppointmentInformation({appointment, currentPos}){
     const [directions, updateDirections] = React.useState(null)
 
     const GetDirections = () =>{

@@ -53,6 +53,7 @@
 }
 
 .schedule-container{
+    padding: 12px 0px;
     margin: 12px;
     display: flex;
     flex-direction: row;

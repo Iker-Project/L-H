@@ -42,7 +42,7 @@ router.get('/:user/illnesses', async (req, res) => {
 
 router.get('/:user/appointments', async (req, res) => {
   try {
-    const userDataQuery = new Parse.Query("Illnesses");
+    const userDataQuery = new Parse.Query("Appointments");
     const userDataParse = await userDataQuery.equalTo('userID', req.params.user).findAll()
 
     res.send(userDataParse)
