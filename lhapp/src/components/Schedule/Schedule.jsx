@@ -35,13 +35,20 @@ export default function Schedule({data, setData}) {
         }
     })
 
-    const saveInfo = (appointmentObj) =>{
-        setIllnesses([...dataAppointments, appointmentObj])
+    const saveInfo = (async (appointmentObj) =>{
+        setAppointments([...dataAppointments, appointmentObj])
         axios.post(`${config.API_BASE_URL}/newAppointment`, appointmentObj)
         .then(res => {
-            console.log(res);
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/appointments`)
+            .then(response => {
+                console.log('res.data: ', response.data);
+                setAppointments(response.data)
+            })
+            .catch(error => {
+                console.error("Error fetching: ", error)
+            })
         })
-    }
+    })
 
     React.useEffect(() => {
         if (navigator.geolocation) {
@@ -229,8 +236,7 @@ export function AddAppointment({saveInfo}){
         const year = newDate.getFullYear();
 
         const str = `${months[month]}, ${newDate.toLocaleDateString('en-US', { weekday: 'long' })} ${ordinal(day)}, ${year}`;
-
-        return {date: str, hout: withPmAm}
+        return {date: str, hour: withPmAm}
     }
 
     const setStartDate = (date) => {
@@ -243,6 +249,34 @@ export function AddAppointment({saveInfo}){
         updateEndHour(getDateAndHour(date).hour)
     }
 
+
+    const submitButton = () => {
+        const newAddress = `${street}, ${city} ${state} ${zipCode}`
+
+        geocodeByAddress(`${street} ${city} ${state} ${zipCode}`)
+            .then(results => getLatLng(results[0]))
+            .then(({ lat, lng }) =>
+                {
+                    const newAppointment = {
+                        userID: localStorage.getItem("current_user_id"),
+                        name: name,
+                        date: date,
+                        hour: startHour,
+                        endDate: endDate,
+                        endHour: endHour,
+                        address: newAddress,
+                        latitude: lat,
+                        longitude: lng
+                    }
+
+                    updateName(""); updateDate(""); updateStartHour(""); updateEndDate(""); updateEndHour("");
+                    updateStreet(""); updateZipCode(""); updateCity(""); updateState(""); updateCountry("");
+
+                    saveInfo(newAppointment)
+                }
+            );
+    }
+
     return(
         <div className="schedule-info">
             <h2>Add New Appointment</h2>
@@ -250,7 +284,7 @@ export function AddAppointment({saveInfo}){
                 <div className="schedule-content">
                     <div>
                         <h3>Subject:</h3>
-                        <input type="text" onChange={(e) => updateName(e.target.value)} placeholder="Appoinment name" className="classic-input"/>
+                        <input type="text" value={name} onChange={(e) => updateName(e.target.value)} placeholder="Appoinment name" className="classic-input"/>
                     </div>
                     <div className="add-dates">
                         <div>
@@ -265,16 +299,16 @@ export function AddAppointment({saveInfo}){
                     </div>
                     <div className="add-address">
                         <h3>Address:</h3>
-                        <input type="text" onChange={(e) => updateStreet(e.target.value)} placeholder="Street" className="classic-input"/>
+                        <input type="text" value={street} onChange={(e) => updateStreet(e.target.value)} placeholder="Street" className="classic-input"/>
                         <div>
-                            <input type="text" onChange={(e) => updateZipCode(e.target.value)} placeholder="Zip Code" className="classic-input"/>
+                            <input type="text" value={zipCode} onChange={(e) => updateZipCode(e.target.value)} placeholder="Zip Code" className="classic-input"/>
                             <span></span>
-                            <input type="text" onChange={(e) => updateCity(e.target.value)} placeholder="City" className="classic-input"/>
+                            <input type="text" value={city} onChange={(e) => updateCity(e.target.value)} placeholder="City" className="classic-input"/>
                         </div>
-                        <input type="text" onChange={(e) => updateState(e.target.value)} placeholder="State" className="classic-input"/>
-                        <input type="text" onChange={(e) => updateCountry(e.target.value)} placeholder="Country" className="classic-input"/>
+                        <input type="text" value={state} onChange={(e) => updateState(e.target.value)} placeholder="State" className="classic-input"/>
+                        <input type="text" value={country} onChange={(e) => updateCountry(e.target.value)} placeholder="Country" className="classic-input"/>
                     </div>
-                    <button className="classic-button"> Add Appointment</button>
+                    <button onClick={() => submitButton()} className="classic-button"> Add Appointment</button>
                 </div>
             </div>
         </div>
