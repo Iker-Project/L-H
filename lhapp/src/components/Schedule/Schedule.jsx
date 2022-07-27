@@ -97,7 +97,9 @@ export default function Schedule({data, setData}) {
                 <div className="second-row">
                 {
                     {
-                        'Appointments': appointmentSelected ? <AppointmentInformation /> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
+                        'Appointments': addingAppointment ?
+                        <AddAppointment/>
+                        : appointmentSelected ? <AppointmentInformation data={appointmentSelected} currentPos={currentPos}/> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
                         'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
                     }[optionSelected]
                 }
@@ -143,7 +145,7 @@ export function AppointmentTab({updateAddingAppointment, appointment, updateAppo
     )
 }
 
-export function AppointmentInformation({appointment, currentPos}){
+export function AppointmentInformation({data, currentPos}){
     const [directions, updateDirections] = React.useState(null)
 
     const GetDirections = () =>{
@@ -152,7 +154,7 @@ export function AppointmentInformation({appointment, currentPos}){
         directionsService.route(
           {
             origin: currentPos,
-            destination: {lat: 40.72, lng: -74.002}, // ONLY TESTING
+            destination: {lat: data.latitude, lng: data.longitude}, // ONLY TESTING
             travelMode: window.google.maps.TravelMode.DRIVING
           },
           (result, status) => {
@@ -167,19 +169,19 @@ export function AppointmentInformation({appointment, currentPos}){
 
     return(
         <div className="schedule-info">
-            <h2>Appointment Selected</h2>
+            <h2>{data.name}</h2>
             <div className="schedule-block">
                 <div className="schedule-content">
                     <div>
                         <h3>Date:</h3>
-                        <p>November 28th, 2022, <span>at</span> 11:28 a.m.</p>
+                        <p>{data.date}, <span>at</span> {data.hour}</p>
                     </div>
                     <div>
                         <h3>Address:</h3>
-                        <p>Hacker Way 1, Menlo Park</p>
+                        <p>{data.address}</p>
                     </div>
                     <div className="map-section">
-                        <Map directions={directions} />
+                        <Map lat={data.latitude} lng={data.longitude} directions={directions} />
                         <div className="map-buttons">
                             <button className="classic-button" onClick={() => GetDirections()}>Get Directions</button>
                             <button className="classic-button">Open In...</button>
@@ -230,7 +232,7 @@ export function AddAppointment(){
     )
 }
 
-export function Map({directions}){
+export function Map({lat, lng, directions}){
     const [ libraries ] = React.useState(['places']);
 
     const {isLoaded, loadError} = useLoadScript({
@@ -255,9 +257,9 @@ export function Map({directions}){
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             zoom={15.5}
-            center={{lat: 40.72, lng: -74.002}} // ONLY TESTING
+            center={{lat: lat, lng: lng}} // ONLY TESTING
             options={options}>
-            <Marker position={{lat: 40.72, lng: -74.002}} /> // ONLY TESTING
+            <Marker position={{lat: lat, lng: lng}} /> // ONLY TESTING
             {directions && <DirectionsRenderer
                 directions={directions}/>}
         </GoogleMap>
