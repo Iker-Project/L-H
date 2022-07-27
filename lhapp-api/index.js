@@ -69,8 +69,8 @@ app.post('/illnesses', async (req, res) => {
     let Illness = Parse.Object.extend("Illnesses")
     const newIllness = new Illness();
 
-    res.status(201)
     newIllness.save(req.body)
+    res.status(201)
     res.send(req.body)
   }
   catch{
@@ -95,11 +95,11 @@ app.post('/deleteIllnesses/:illnessId', async (req, res) => {
 
 app.post('/newAppointment', async (req, res) => {
   try {
-    let Appointment = Parse.Object.extend("Illnesses")
-    const newIllness = new Appointment();
+    let Appointment = Parse.Object.extend("Appointments")
+    const newAppointment = new Appointment();
 
+    newAppointment.save(req.body)
     res.status(201)
-    newIllness.save(req.body)
     res.send(req.body)
   }
   catch{
@@ -108,7 +108,7 @@ app.post('/newAppointment', async (req, res) => {
 })
 
 app.post('/deleteAppointment/:appointmentId', async (req, res) => {
-  let appointment = new Parse.Object('Illnesses')
+  let appointment = new Parse.Object('Appointments')
   appointment.set('objectId', req.params.appointmentId)
 
   try {

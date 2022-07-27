@@ -36,8 +36,8 @@ export default function Schedule({data, setData}) {
     })
 
     const saveInfo = (appointmentObj) =>{
-        setIllnesses([...dataIllnesses, appointmentObj])
-        axios.post(`${config.API_BASE_URL}/newAppointment`, dataIllnesses)
+        setIllnesses([...dataAppointments, appointmentObj])
+        axios.post(`${config.API_BASE_URL}/newAppointment`, appointmentObj)
         .then(res => {
             console.log(res);
         })
@@ -98,7 +98,7 @@ export default function Schedule({data, setData}) {
                 {
                     {
                         'Appointments': addingAppointment ?
-                        <AddAppointment/>
+                        <AddAppointment saveInfo={saveInfo}/>
                         : appointmentSelected ? <AppointmentInformation data={appointmentSelected} currentPos={currentPos}/> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
                         'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
                     }[optionSelected]
@@ -200,13 +200,48 @@ export function AppointmentInformation({data, currentPos}){
 export function AddAppointment({saveInfo}){
     const [name, updateName] = React.useState("")
     const [date, updateDate] = React.useState("")
+    const [startHour, updateStartHour] = React.useState("")
     const [endDate, updateEndDate] = React.useState("")
-    const [hout, updateHour] = React.useState("")
+    const [endHour, updateEndHour] = React.useState("")
     const [street, updateStreet] = React.useState("")
     const [zipCode, updateZipCode] = React.useState("")
     const [city, updateCity] = React.useState("")
     const [state, updateState] = React.useState("")
     const [country, updateCountry] = React.useState("")
+
+    function ordinal(n) {
+        var s = ["th", "st", "nd", "rd"];
+        var v = n%100;
+        return n + (s[(v-20)%10] || s[v] || s[0]);
+    }
+
+    const getDateAndHour = (date) => {
+        const newDate = new Date(date);
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const withPmAm = newDate.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+
+        const day = newDate.getDate();
+        const month = newDate.getMonth();
+        const year = newDate.getFullYear();
+
+        const str = `${months[month]}, ${newDate.toLocaleDateString('en-US', { weekday: 'long' })} ${ordinal(day)}, ${year}`;
+
+        return {date: str, hout: withPmAm}
+    }
+
+    const setStartDate = (date) => {
+        updateDate(getDateAndHour(date).date)
+        updateStartHour(getDateAndHour(date).hour)
+    }
+
+    const setEndDate = (date) => {
+        updateEndDate(getDateAndHour(date).date)
+        updateEndHour(getDateAndHour(date).hour)
+    }
 
     return(
         <div className="schedule-info">
@@ -215,29 +250,29 @@ export function AddAppointment({saveInfo}){
                 <div className="schedule-content">
                     <div>
                         <h3>Subject:</h3>
-                        <input type="text" placeholder="Appoinment name" className="classic-input"/>
+                        <input type="text" onChange={(e) => updateName(e.target.value)} placeholder="Appoinment name" className="classic-input"/>
                     </div>
                     <div className="add-dates">
                         <div>
                             <h3>Start Date:</h3>
-                            <input type="datetime-local" className="classic-input"/>
+                            <input type="datetime-local" onChange={(e) => setStartDate(e.target.value)} className="classic-input"/>
                         </div>
                         <span></span>
                         <div>
                             <h3>End Date:</h3>
-                            <input type="datetime-local" className="classic-input"/>
+                            <input type="datetime-local" onChange={(e) => setEndDate(e.target.value)} className="classic-input"/>
                         </div>
                     </div>
                     <div className="add-address">
                         <h3>Address:</h3>
-                        <input type="text" placeholder="Street" className="classic-input"/>
+                        <input type="text" onChange={(e) => updateStreet(e.target.value)} placeholder="Street" className="classic-input"/>
                         <div>
-                            <input type="text" placeholder="Zip Code" className="classic-input"/>
+                            <input type="text" onChange={(e) => updateZipCode(e.target.value)} placeholder="Zip Code" className="classic-input"/>
                             <span></span>
-                            <input type="text" placeholder="City" className="classic-input"/>
+                            <input type="text" onChange={(e) => updateCity(e.target.value)} placeholder="City" className="classic-input"/>
                         </div>
-                        <input type="text" placeholder="State" className="classic-input"/>
-                        <input type="text" placeholder="Country" className="classic-input"/>
+                        <input type="text" onChange={(e) => updateState(e.target.value)} placeholder="State" className="classic-input"/>
+                        <input type="text" onChange={(e) => updateCountry(e.target.value)} placeholder="Country" className="classic-input"/>
                     </div>
                     <button className="classic-button"> Add Appointment</button>
                 </div>
