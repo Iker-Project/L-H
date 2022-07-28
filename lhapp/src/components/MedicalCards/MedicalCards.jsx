@@ -71,7 +71,8 @@ export default function MedicalCards() {
                 </div>
                 <span></span>
                 <div className="second-row">
-                    <CreateMedicalCard/>
+                    {/* <CreateMedicalCard/> */}
+                    {mcSelected ? <MedicalCardInformation data={mcSelected}/> : <div className="fit-height"><h3>Select a Medical Card.</h3></div>}
                 </div>
             </section>
         </div>
@@ -81,47 +82,49 @@ export default function MedicalCards() {
 export function MedicalCard({medicalCard, updateAddingMC, updateMCSelected, deleteMode, handleDeleteButton}){
     return(
         <div className="medical-card" onClick={() => {updateAddingMC(false); updateMCSelected(medicalCard)}}>
-            <div className="medicalcard-container">
+            <div className="medicalcard-container" style={{width: "100%"}}>
                 {/* <div className="medicalCard-icon">
                     <img src="" alt="Medical Card Icon" className="card-icon"/>
                 </div> */}
-                <div>
-                    <p>{medicalCard.name}</p>
-                    <span>{medicalCard.specialty}</span>
+                <div className="medicalCard-title" style={{width: "100%", display: "flex", alignItems: "flex-start", justifyItems: "space-between"}}>
+                    <div>
+                        <p>{medicalCard.name}</p>
+                        <span>{medicalCard.specialty}</span>
+                    </div>
+                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.objectId)}}><img src="" alt="delete button" /></button>}
                 </div>
-                {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.objectId)}}><img src="" alt="delete button" /></button>}
             </div>
         </div>
     )
 }
 
-export function MedicalCardInformation(){
+export function MedicalCardInformation({data}){
     return(
         <div className="medicalcard-info">
             <div className="medicalcard-block">
                 <div className="medicalcard-container">
                     <div className="medicalcard-header">
-                        <div className="img-container">
+                        {/* <div className="img-container">
                             <img src="" alt="Medical Card Icon" className="card-icon"/>
-                        </div>
+                        </div> */}
                         <div>
-                            <p>Name</p>
-                            <span>Specilty</span>
+                            <p>{data.name}</p>
+                            <span>{data.specialty}</span>
                         </div>
                     </div>
                     <div className="medicalcard-rowsection">
                         <img src="" alt="phone icon" className="icon"/>
-                        <p className="phone-number">Phone Number</p>
+                        <p className="phone-number">{data.phone}</p>
                     </div>
                     <div className="medicalcard-address">
                         <h3>Address:</h3>
-                        <p>Street</p>
-                        <p>Zip Code, City, State</p>
-                        <p>Country</p>
+                        <p>{data.address.street}</p>
+                        <p>{data.address.zip}, {data.address.city}, {data.address.state}</p>
+                        <p>{data.address.country}</p>
                     </div>
                     <div className="medicalcard-rowsection">
                         <img src="" alt="phone icon" className="icon"/>
-                        <p>mail@email.com</p>
+                        <p>{data.email}</p>
                     </div>
                 </div>
             </div>
@@ -129,7 +132,7 @@ export function MedicalCardInformation(){
     )
 }
 
-export function CreateMedicalCard(){
+export function CreateMedicalCard({saveInfo}){
     return(
         <div className="medicalcard-create">
             <div className="medicalcard-block">
