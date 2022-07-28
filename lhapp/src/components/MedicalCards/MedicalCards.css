@@ -29,6 +29,15 @@
     padding-right: 0;
 }
 
+.addDelete-button{
+    display: flex;
+    flex-direction: row;
+}
+
+.addDelete-button span{
+    width: 25px;
+}
+
 /* Medical Card */
 
 .medical-card {
@@ -36,6 +45,7 @@
     background: white;
     border-radius: var(--border_radius);
     margin-top: 10px;
+    cursor: pointer;
 }
 
 .medical-card .medicalcard-container{
@@ -56,6 +66,14 @@
 .card-icon{
     width: 60px;
     height: 60px;
+}
+
+.medicalCard-title button{
+    border-style: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: red;
 }
 
 /* Medical Card Info */
