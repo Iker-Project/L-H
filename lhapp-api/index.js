@@ -116,7 +116,7 @@ app.post('/newMedicalCard', async (req, res) => {
 })
 
 app.post('/deleteMedicalCard/:mcId', async (req, res) => {
-  let medicalCard = new Parse.Object('Illnesses')
+  let medicalCard = new Parse.Object('MedicalCard')
   medicalCard.set('objectId', req.params.mcId)
 
   try {

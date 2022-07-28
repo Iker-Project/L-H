@@ -1,6 +1,7 @@
 import React from 'react'
 import "./MedicalCards.css"
 import * as config from "../../config"
+import Geocode from "react-geocode";
 import axios from "axios"
 
 export default function MedicalCards() {
@@ -19,32 +20,41 @@ export default function MedicalCards() {
             axios.post(`${config.API_BASE_URL}/deleteMedicalCard/${id}`)
             .then(res => {
                 console.log(res);
+                let newDataList = medicalCards.filter(mc => mc.objectId != id);
+                setMedicalCards([...newDataList])
             })
-            let newDataList = medicalCards.filter(mc => mc.objectId != id);
-            setIllnesses([...newDataList])
         }
     })
 
-    const saveInfo = (illnessObj) =>{
-        setIllnesses([...dataIllnesses, illnessObj])
-        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
+    const saveInfo = (medicalCard) =>{
+        axios.post(`${config.API_BASE_URL}/newMedicalCard`, medicalCard)
         .then(res => {
-            console.log(res);
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setMedicalCards(response.data)
+                    setIsLoading(false)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
         })
     }
 
     React.useEffect(() => {
-        // const fetchUserData = (async () => {
-        //     axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
-        //         .then(response => {
-        //             console.log('res.data: ', response.data);
-        //             setMedicalCards(response.data)
-        //             setIsLoading(false)
-        //         })
-        //         .catch(error => {
-        //             console.error("Error fetching: ", error)
-        //         })
-        //   })()
+        Geocode.setApiKey("AIzaSyBZ-L6y4RM_Adga1qdKEj8ZTMCBkMHE_3o")
+
+        const fetchUserData = (async () => {
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setMedicalCards(response.data)
+                    setIsLoading(false)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
+          })()
     },[])
 
     return (
@@ -63,7 +73,7 @@ export default function MedicalCards() {
                         <span></span>
                         <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
                     </div>
-                    {!isLoading ? medicalCards.map((medicalCard) => {
+                    {!isLoading && medicalCards.length > 0 ? medicalCards.map((medicalCard) => {
                         return <MedicalCard key={medicalCards.objectId} medicalCard={medicalCard} updateAddingMC={updateAddingMC} updateMCSelected={updateMCSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
                     })
                     : <div className="fit-height"><h3>No Medical Cards registered.</h3></div>}
@@ -93,7 +103,7 @@ export function MedicalCard({medicalCard, updateAddingMC, updateMCSelected, dele
                         <p>{medicalCard.name}</p>
                         <span>{medicalCard.specialty}</span>
                     </div>
-                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.objectId)}}><img src="" alt="delete button" /></button>}
+                    {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(medicalCard.objectId)}}><img src="" alt="delete button" /></button>}
                 </div>
             </div>
         </div>
@@ -147,30 +157,38 @@ export function CreateMedicalCard({saveInfo}){
 
     const handleRemoveItem = (i) => {
         const arrayCopy = phoneNumbers;
-        if (i > -1) { // only splice array when item is found
-            arrayCopy.splice(i, 1); // 2nd parameter means remove one item only
+        if (i > -1) {
+            arrayCopy.splice(i, 1);
         }
 
         setPhoneNumbers([...arrayCopy]);
     };
 
     const handleSaveInfo = () => {
-        const newMedicalCard = {
-            name: fullName,
-            specilty: specilty,
-            phoneNumbers: phoneNumbers,
-            address: {
-                street: street,
-                zip: zip,
-                city: city,
-                state: state,
-                country: country
-            },
-            email: email,
-            userID: localStorage.getItem("current_user_id")
-        }
+        Geocode.fromAddress(`${street} ${city} ${state} ${zip}`).then(
+            (response) => {
+            const { lat, lng } = response.results[0].geometry.location;
 
-        saveInfo(newMedicalCard)
+            const newMedicalCard = {
+                name: fullName,
+                specilty: specilty,
+                phoneNumbers: phoneNumbers,
+                latitude: lat,
+                longitude: lng,
+                address: {
+                    street: street,
+                    zip: zip,
+                    city: city,
+                    state: state,
+                    country: country
+                },
+                email: email,
+                userID: localStorage.getItem("current_user_id")
+            }
+            // console.log('newMedicalCard: ', newMedicalCard);
+            saveInfo(newMedicalCard)
+        })
+
     }
 
     return(
@@ -205,7 +223,7 @@ export function CreateMedicalCard({saveInfo}){
                     <span className="column-space"></span>
                     <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="classic-input" placeholder="Email"/>
                     <span className="column-space"></span>
-                    <button className="classic-button">Create Card</button>
+                    <button onClick={() => handleSaveInfo()} className="classic-button">Create Card</button>
                 </div>
             </div>
         </div>
