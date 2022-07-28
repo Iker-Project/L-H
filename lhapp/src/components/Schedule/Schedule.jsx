@@ -1,6 +1,7 @@
 import React from 'react'
 import {GoogleMap, useLoadScript, Marker, DirectionsRenderer} from "@react-google-maps/api"
-import {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+// import {getGeocode, getLatLng} from 'use-places-autocomplete'
+import Geocode from "react-geocode";
 import mapStyles from "./mapStyles"
 import axios from "axios"
 import * as config from "../../config"
@@ -17,12 +18,12 @@ export default function Schedule({data, setData}) {
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
     const [currentPos, updateCurrentPos] = React.useState(null)
 
-    const [addingAppointment, updateAddingAppointment] = React.useState(false)
+    const [addNewTab, updateAddNewTab] = React.useState(false)
     const [deleteMode, updateDelteMode] = React.useState(false)
     const [appointmentSelected, updateAppointmentSelected] = React.useState(null)
     const [medicineSelected, updateMedicineSelected] = React.useState(null)
 
-    const handleDeleteButton = ( async (id) => {
+    const handleDeleteAppointment = ( async (id) => {
         updateDelteMode(!deleteMode)
         updateAppointmentSelected(null)
 
@@ -36,8 +37,21 @@ export default function Schedule({data, setData}) {
         }
     })
 
-    const saveInfo = (async (appointmentObj) =>{
-        setAppointments([...dataAppointments, appointmentObj])
+    const handleDeleteMedicine = ( async (id) => {
+        updateDelteMode(!deleteMode)
+        updateMedicineSelected(null)
+
+        if (id){
+            axios.post(`${config.API_BASE_URL}/deleteMedicine/${id}`)
+            .then(res => {
+                console.log(res);
+            })
+            let newDataList = dataMedicine.filter(medicine => medicine.objectId != id);
+            setMedicine([...newDataList])
+        }
+    })
+
+    const saveAppointment = (async (appointmentObj) =>{
         axios.post(`${config.API_BASE_URL}/newAppointment`, appointmentObj)
         .then(res => {
             axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/appointments`)
@@ -51,7 +65,23 @@ export default function Schedule({data, setData}) {
         })
     })
 
+    const saveMedicine = (async (medicineObj) =>{
+        axios.post(`${config.API_BASE_URL}/newMedicine`, medicineObj)
+        .then(res => {
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicine`)
+            .then(response => {
+                console.log('res.data: ', response.data);
+                setMedicine(response.data)
+            })
+            .catch(error => {
+                console.error("Error fetching: ", error)
+            })
+        })
+    })
+
     React.useEffect(() => {
+        Geocode.setApiKey("AIzaSyBZ-L6y4RM_Adga1qdKEj8ZTMCBkMHE_3o");
+
         if (navigator.geolocation) {
 	    	navigator.geolocation.getCurrentPosition(showPosition);
 	  	} else {
@@ -66,8 +96,16 @@ export default function Schedule({data, setData}) {
         const fetchUserData = (async () => {
             axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/appointments`)
                 .then(response => {
-                    console.log('res.data: ', response.data);
                     setAppointments(response.data)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
+
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicine`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setMedicine(response.data)
                 })
                 .catch(error => {
                     console.error("Error fetching: ", error)
@@ -94,9 +132,9 @@ export default function Schedule({data, setData}) {
                     {
                         {
                             'Appointments':
-                                <AppointmentManager updateAddingAppointment={updateAddingAppointment} data={dataAppointments} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>,
+                                <AppointmentManager updateAddNewTab={updateAddNewTab} data={dataAppointments} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteAppointment}/>,
                             'Medicine':
-                                <MedicineManager />
+                                <MedicineManager updateAddNewTab={updateAddNewTab} data={dataMedicine} updateMedicineSelected={updateMedicineSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteMedicine}/>
                         }[optionSelected]
                     }
                 </div>
@@ -104,10 +142,12 @@ export default function Schedule({data, setData}) {
                 <div className="second-row">
                 {
                     {
-                        'Appointments': addingAppointment ?
-                        <AddAppointment saveInfo={saveInfo}/>
+                        'Appointments': addNewTab ?
+                        <AddAppointment saveInfo={saveAppointment}/>
                         : appointmentSelected ? <AppointmentInformation data={appointmentSelected} currentPos={currentPos}/> : <div className="fit-height"><h3>Select an Appointment.</h3></div>,
-                        'Medicine': medicineSelected ? <MedicineInformation /> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
+                        'Medicine': addNewTab ?
+                        <AddMedicine saveInfo={saveMedicine}/>
+                        : medicineSelected ? <MedicineInformation data={medicineSelected}/> : <div className="fit-height"><h3>Select a Medicine.</h3></div>
                     }[optionSelected]
                 }
                 </div>
@@ -116,42 +156,42 @@ export default function Schedule({data, setData}) {
     )
 }
 
-export function AppointmentManager({updateAddingAppointment, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+export function AppointmentManager({updateAddNewTab, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
     return(
         <div style={{width: "100%", height: "auto"}}>
             <div className="addDelete-button">
-                <button className="classic-button" onClick={() => updateAddingAppointment(true)}>Tap to add an appointment</button>
+                <button className="classic-button" onClick={() => updateAddNewTab(true)}>Tap to add an appointment</button>
                 <span></span>
                 <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
             </div>
             {data.length > 0 ? data.map((appointment) => {
-                return <AppointmentTab key={appointment.objectId} updateAddingAppointment={updateAddingAppointment} appointment={appointment} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+                return <AppointmentTab key={appointment.objectId} updateAddNewTab={updateAddNewTab} appointment={appointment} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
             })
             : <div className="fit-height"><h3>No appointments registered.</h3></div>}
         </div>
     )
 }
 
-export function MedicineManager({updateAddingAppointment, data, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+export function MedicineManager({updateAddNewTab, data, updateMedicineSelected, deleteMode, handleDeleteButton}){
 
     return(
         <div style={{width: "100%", height: "auto"}}>
             <div className="addDelete-button">
-                <button className="classic-button" onClick={() => updateAddingAppointment(true)}>Tap to add an appointment</button>
+                <button className="classic-button" onClick={() => updateAddNewTab(true)}>Tap to add a medicine</button>
                 <span></span>
                 <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
             </div>
-            {data.length > 0 ? data.map((appointment) => {
-                return <AppointmentTab key={appointment.objectId} updateAddingAppointment={updateAddingAppointment} appointment={appointment} updateAppointmentSelected={updateAppointmentSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+            {data.length > 0 ? data.map((medicine) => {
+                return <MedicineTab key={medicine.objectId} updateAddNewTab={updateAddNewTab} medicine={medicine} updateMedicineSelected={updateMedicineSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
             })
-            : <div className="fit-height"><h3>No appointments registered.</h3></div>}
+            : <div className="fit-height"><h3>No medicine registered.</h3></div>}
         </div>
     )
 }
 
-export function AppointmentTab({updateAddingAppointment, appointment, updateAppointmentSelected, deleteMode, handleDeleteButton}){
+export function AppointmentTab({updateAddNewTab, appointment, updateAppointmentSelected, deleteMode, handleDeleteButton}){
     return(
-        <div className="schedule-block" onClick={() => {updateAddingAppointment(false); updateAppointmentSelected(appointment)}}>
+        <div className="schedule-block" onClick={() => {updateAddNewTab(false); updateAppointmentSelected(appointment)}}>
             <div className="schedule-container">
                 {/* Appointment Logo - Stretch Feature */}
                 {/* <div className="logo-container">
@@ -266,31 +306,33 @@ export function AddAppointment({saveInfo}){
     }
 
 
-    const submitButton = () => {
-        const newAddress = `${street}, ${city} ${state} ${zipCode}`
+    const submitButton = async () => {
+        const newAddress = `${street}, ${city} ${state} ${zipCode}`;
 
-        geocodeByAddress(`${street} ${city} ${state} ${zipCode}`)
-            .then(results => getLatLng(results[0]))
-            .then(({ lat, lng }) =>
-                {
-                    const newAppointment = {
-                        userID: localStorage.getItem("current_user_id"),
-                        name: name,
-                        date: date,
-                        hour: startHour,
-                        endDate: endDate,
-                        endHour: endHour,
-                        address: newAddress,
-                        latitude: lat,
-                        longitude: lng
-                    }
+        Geocode.fromAddress(`${street} ${city} ${state} ${zipCode}`).then(
+            (response) => {
+              const { lat, lng } = response.results[0].geometry.location;
+              const newAppointment = {
+                userID: localStorage.getItem("current_user_id"),
+                name: name,
+                date: date,
+                hour: startHour,
+                endDate: endDate,
+                endHour: endHour,
+                address: newAddress,
+                latitude: lat,
+                longitude: lng
+            }
 
-                    updateName(""); updateDate(""); updateStartHour(""); updateEndDate(""); updateEndHour("");
-                    updateStreet(""); updateZipCode(""); updateCity(""); updateState(""); updateCountry("");
+            updateName(""); updateDate(""); updateStartHour(""); updateEndDate(""); updateEndHour("");
+            updateStreet(""); updateZipCode(""); updateCity(""); updateState(""); updateCountry("");
 
-                    saveInfo(newAppointment)
-                }
-            );
+            saveInfo(newAppointment)
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
     }
 
     return(
@@ -365,40 +407,42 @@ export function Map({lat, lng, directions}){
     )
 }
 
-export function MedicineTab(){
+export function MedicineTab({updateAddNewTab, medicine, updateMedicineSelected, deleteMode, handleDeleteButton}){
     return(
-        <div className="schedule-block">
+        <div className="schedule-block" onClick={() => {updateAddNewTab(false); updateMedicineSelected(medicine)}}>
             <div className="schedule-container">
-                <div className="logo-container">
+                {/* Medicine Logo - Stretch Feature */}
+                {/* <div className="logo-container">
                     <img src="" alt="Medicine Logo" />
-                </div>
+                </div> */}
                 <div>
-                    <p>Medicine name</p>
-                    <h3><span>Take:</span> 1 Tab(s)<span>, Each</span> 1 hour(s) <span>, For</span> 10 days</h3>
-                    <h3><span>Ends:</span> January 17th, 2023 <span>at:</span> 11:28 p.m.</h3>
+                    <p>{medicine.name}</p>
+                    <h3><span>Take:</span> {medicine.take} Tab(s)<span>, Each</span> {medicine.each} hour(s) <span>, For</span> {medicine.for} days</h3>
+                    <h3><span>Ends:</span> {medicine.endDate} <span>at:</span> {medicine.endHour}</h3>
                 </div>
+                {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(medicine.objectId)}}><img src="" alt="delete button" /></button>}
             </div>
         </div>
     )
 }
 
-export function MedicineInformation(){
+export function MedicineInformation({data}){
     return(
         <div className="schedule-info">
-            <h2>Medicine Selected</h2>
+            <h2>{data.name}</h2>
             <div className="schedule-block">
                 <div className="schedule-content">
                     <div>
                         <h3>Started Date:</h3>
-                        <p>November 28th, 2022, <span>at</span> 11:28 a.m.</p>
+                        <p>{data.startDate}, <span>at</span> {data.startHour}</p>
                     </div>
                     <div>
                         <h3>End Date:</h3>
-                        <p>January 28th, 2023, <span>at</span> 11:28 p.m.</p>
+                        <p>{data.endDate}, <span>at</span> {data.endHour}</p>
                     </div>
                     <div>
                         <h3>Prescription:</h3>
-                        <p>Prescription...</p>
+                        <p>{data.prescription}</p>
                     </div>
                 </div>
             </div>
@@ -406,9 +450,95 @@ export function MedicineInformation(){
     )
 }
 
-export function AddMedicine(){
+export function AddMedicine({saveInfo}){
+    const [name, updateName] = React.useState("")
+    const [startDate, updateStartDate] = React.useState("")
+    const [startHour, updateStartHour] = React.useState("")
+    const [endDate, updateEndDate] = React.useState("")
+    const [endHour, updateEndHour] = React.useState("")
+    const [nextDates, updateNextDates] = React.useState([])
+    const [prescription, updatePrescription] = React.useState("")
+    const [take, updateTake] = React.useState(0)
+    const [each, updateEach] = React.useState(0)
+    const [forTime, updateForTime] = React.useState(0)
     const optionsData = ["Tab(s)", "ML", "Drop(s)"]
     const [optionSelected, updateOpcionSelected] = React.useState(optionsData[0])
+
+    const [date, updateDate] = React.useState(new Date())
+
+    function ordinal(n) {
+        var s = ["th", "st", "nd", "rd"];
+        var v = n%100;
+        return n + (s[(v-20)%10] || s[v] || s[0]);
+    }
+
+    const getDateAndHour = (date) => {
+        const newDate = new Date(date);
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const withPmAm = newDate.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+
+        const day = newDate.getDate();
+        const month = newDate.getMonth();
+        const year = newDate.getFullYear();
+
+        const str = `${months[month]}, ${newDate.toLocaleDateString('en-US', { weekday: 'long' })} ${ordinal(day)}, ${year}`;
+        return {date: str, hour: withPmAm}
+    }
+
+    const setStartDate = (date) => {
+        updateDate(date)
+        updateStartDate(getDateAndHour(date).date)
+        updateStartHour(getDateAndHour(date).hour)
+    }
+
+    const submitButton = () => {
+        // getMedicineSchedule()
+
+        const timesAtDay = (forTime * 24) / each;
+
+        var today = new Date(date);
+        var dates = []
+
+        for (let i = 0; i < timesAtDay; i++) {
+            today = new Date(today.getTime() + each*60*60*1000);
+            dates.push(today)
+        }
+
+        const newMedicine = {
+            userID: localStorage.getItem("current_user_id"),
+            name: name,
+            startDate: startDate,
+            startHour: startHour,
+            endDate: getDateAndHour(dates[dates.length - 1]).date,
+            endHour: getDateAndHour(dates[dates.length - 1]).hour,
+            prescription: prescription,
+            take: take,
+            takeSelected: optionSelected,
+            each: each,
+            for: forTime,
+            dates: dates,
+        }
+        console.log('newMedicine: ', newMedicine);
+        updateName(""); updateDate(""); updateStartHour(""); updatePrescription(""); updateTake("");
+        updateEach(""); updateForTime(""); updateOpcionSelected("");
+
+        saveInfo(newMedicine)
+    }
+
+    const getMedicineSchedule = () => {
+
+
+        updateEndDate(getDateAndHour(dates[dates.length - 1]).date)
+        updateEndHour(getDateAndHour(dates[dates.length - 1]).hour)
+        updateNextDates([...dates])
+        console.log(endDate);
+        console.log(endHour);
+        console.log(nextDates);
+    }
 
     return(
         <div className="schedule-info">
@@ -416,21 +546,19 @@ export function AddMedicine(){
             <div className="schedule-block">
                 <div className="schedule-content">
                     <div>
-                        <input type="text" placeholder="Medicine name" className="classic-input"/>
+                        <input onChange={(e) => updateName(e.target.value)} type="text" placeholder="Medicine name" className="classic-input"/>
                     </div>
                     <div className="add-time">
                             <h3>Start Date:</h3>
                         <div>
-                            <input type="date" className="classic-input"/>
-                            <span></span>
-                            <input type="time" className="classic-input"/>
+                            <input onChange={(e) => setStartDate(e.target.value)} type="datetime-local" className="classic-input"/>
                         </div>
                     </div>
                     <div className="add-prescription">
                         <h3>Prescription:</h3>
                         <div>
                             <h3>Take:</h3>
-                            <input type="text" className="classic-input"/>
+                            <input onChange={(e) => updateTake(e.target.value)} type="number" className="classic-input"/>
                             <span></span>
                             <div className="prescription-dropdown">
                                 <Dropdown data={optionsData} updateData={updateOpcionSelected}/>
@@ -438,16 +566,17 @@ export function AddMedicine(){
                         </div>
                         <div>
                             <h3>Each:</h3>
-                            <input type="text" className="classic-input"/>
+                            <input onChange={(e) => updateEach(e.target.value)} type="number" className="classic-input"/>
                             <h3>Hours</h3>
                         </div>
                         <div>
                             <h3>For:</h3>
-                            <input type="text" className="classic-input"/>
+                            <input onChange={(e) => updateForTime(e.target.value)} type="number" className="classic-input"/>
                             <h3>Days</h3>
                         </div>
+                        <textarea onChange={(e) => updatePrescription(e.target.value)} className="classic-input" style={{height: "150px", marginTop: "20px", fontSize: "18px"}} placeholder="More Details... (optional)" name="" id="" cols="30" rows="10"></textarea>
                     </div>
-                    <button className="classic-button"> Add Appointment</button>
+                    <button onClick={() => submitButton()} className="classic-button"> Add Appointment</button>
                 </div>
             </div>
         </div>
