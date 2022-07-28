@@ -1,6 +1,5 @@
 import React from 'react'
 import {GoogleMap, useLoadScript, Marker, DirectionsRenderer} from "@react-google-maps/api"
-// import {getGeocode, getLatLng} from 'use-places-autocomplete'
 import Geocode from "react-geocode";
 import mapStyles from "./mapStyles"
 import axios from "axios"
@@ -496,8 +495,6 @@ export function AddMedicine({saveInfo}){
     }
 
     const submitButton = () => {
-        // getMedicineSchedule()
-
         const timesAtDay = (forTime * 24) / each;
 
         var today = new Date(date);
@@ -527,17 +524,6 @@ export function AddMedicine({saveInfo}){
         updateEach(""); updateForTime(""); updateOpcionSelected("");
 
         saveInfo(newMedicine)
-    }
-
-    const getMedicineSchedule = () => {
-
-
-        updateEndDate(getDateAndHour(dates[dates.length - 1]).date)
-        updateEndHour(getDateAndHour(dates[dates.length - 1]).hour)
-        updateNextDates([...dates])
-        console.log(endDate);
-        console.log(endHour);
-        console.log(nextDates);
     }
 
     return(
