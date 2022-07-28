@@ -58,9 +58,13 @@ export default function MedicalCards() {
 
             <section className="rows">
                 <div className="first-row">
-                    <button className="classic-button">Add new Medical Card</button>
-                    {!isLoading ? medicalCards.map((medicalCards) => {
-                        return <MedicalCard key={medicalCards.objectId} medicalCards={medicalCards} updateAddingMC={updateAddingMC} updateMCSelected={updateMCSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+                    <div className="addDelete-button" style={{width: "100%", height: "auto"}}>
+                        <button className="classic-button" onClick={() => updateAddingMC(true)}>Add new Medical Card</button>
+                        <span></span>
+                        <button className={`delete-button ${deleteMode ? "active" : ""}`} onClick={() => handleDeleteButton()}></button>
+                    </div>
+                    {!isLoading ? medicalCards.map((medicalCard) => {
+                        return <MedicalCard key={medicalCards.objectId} medicalCard={medicalCard} updateAddingMC={updateAddingMC} updateMCSelected={updateMCSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
                     })
                     : <div className="fit-height"><h3>No Medical Cards registered.</h3></div>}
 
@@ -74,17 +78,18 @@ export default function MedicalCards() {
     )
 }
 
-export function MedicalCard({medicalCards, updateAddingMC, updateMCSelected, deleteMode, handleDeleteButton}){
+export function MedicalCard({medicalCard, updateAddingMC, updateMCSelected, deleteMode, handleDeleteButton}){
     return(
-        <div className="medical-card">
+        <div className="medical-card" onClick={() => {updateAddingMC(false); updateMCSelected(medicalCard)}}>
             <div className="medicalcard-container">
-                <div>
+                {/* <div className="medicalCard-icon">
                     <img src="" alt="Medical Card Icon" className="card-icon"/>
-                </div>
+                </div> */}
                 <div>
-                    <p>{medicalCards.name}</p>
-                    <span>{medicalCards.specialty}</span>
+                    <p>{medicalCard.name}</p>
+                    <span>{medicalCard.specialty}</span>
                 </div>
+                {deleteMode && <button onClick={(e) => {e.stopPropagation(); handleDeleteButton(illness.objectId)}}><img src="" alt="delete button" /></button>}
             </div>
         </div>
     )

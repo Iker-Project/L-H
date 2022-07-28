@@ -42,11 +42,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin: 10px;
 }
 
-.medical-card .medicalcard-container > div:first-child{
+.medical-card .medicalcard-container .medicalCard-icon{
     background: gray;
-    margin: 10px;
     border-radius: var(--border_radius);
     display: flex;
     justify-items: center;
