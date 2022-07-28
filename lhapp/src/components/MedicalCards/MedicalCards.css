@@ -83,7 +83,6 @@
 }
 
 .medicalcard-block{
-    margin-top: 78px;
     width: 100%;
     background-color: white;
     border-radius: var(--border_radius);
@@ -144,7 +143,7 @@
 }
 
 .medicalcard-create .medicalcard-block{
-    margin-top: 78px;
+    /* margin-top: 78px; */
     width: 100%;
     background-color: white;
     border-radius: var(--border_radius);
@@ -152,7 +151,7 @@
 
 .medicalcard-create .medicalcard-container{
     padding: 15px;
-    width: 95%;
+    width: 90%;
 }
 
 .column-space{
@@ -165,13 +164,14 @@
 }
 
 .medicalcard-phone{
-    align-items: center;
+    align-items: flex-start;
     display: flex;
     flex-direction: row;
 }
 
 .medicalcard-phone > button{
     border-style: none;
+    margin-top: 3px;
     width: 45px;
     height: 45px;
     border-radius: var(--border_radius);
