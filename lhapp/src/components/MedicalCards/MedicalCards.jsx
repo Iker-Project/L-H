@@ -34,17 +34,17 @@ export default function MedicalCards() {
     }
 
     React.useEffect(() => {
-        const fetchUserData = (async () => {
-            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
-                .then(response => {
-                    console.log('res.data: ', response.data);
-                    setMedicalCards(response.data)
-                    setIsLoading(false)
-                })
-                .catch(error => {
-                    console.error("Error fetching: ", error)
-                })
-          })()
+        // const fetchUserData = (async () => {
+        //     axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
+        //         .then(response => {
+        //             console.log('res.data: ', response.data);
+        //             setMedicalCards(response.data)
+        //             setIsLoading(false)
+        //         })
+        //         .catch(error => {
+        //             console.error("Error fetching: ", error)
+        //         })
+        //   })()
     },[])
 
     return (
@@ -72,7 +72,9 @@ export default function MedicalCards() {
                 <span></span>
                 <div className="second-row">
                     {/* <CreateMedicalCard/> */}
-                    {mcSelected ? <MedicalCardInformation data={mcSelected}/> : <div className="fit-height"><h3>Select a Medical Card.</h3></div>}
+                    {addingMC ?
+                    <CreateMedicalCard saveInfo={saveInfo}/> :
+                    mcSelected ? <MedicalCardInformation data={mcSelected}/> : <div className="fit-height"><h3>Select a Medical Card.</h3></div>}
                 </div>
             </section>
         </div>
@@ -114,7 +116,7 @@ export function MedicalCardInformation({data}){
                     </div>
                     <div className="medicalcard-rowsection">
                         <img src="" alt="phone icon" className="icon"/>
-                        <p className="phone-number">{data.phone}</p>
+                        <p className="phone-number">{data.phoneNumbers[0]}</p>
                     </div>
                     <div className="medicalcard-address">
                         <h3>Address:</h3>
@@ -133,37 +135,95 @@ export function MedicalCardInformation({data}){
 }
 
 export function CreateMedicalCard({saveInfo}){
+    const [fullName, setFullName] = React.useState("")
+    const [specilty, setSpecilty] = React.useState("")
+    const [phoneNumbers, setPhoneNumbers] = React.useState([""])
+    const [street, setStreet] = React.useState([])
+    const [zip, setZip] = React.useState([])
+    const [city, setCity] = React.useState([])
+    const [state, setState] = React.useState([])
+    const [country, setCountry] = React.useState([])
+    const [email, setEmail] = React.useState([])
+
+    const handleRemoveItem = (i) => {
+        const arrayCopy = phoneNumbers;
+        if (i > -1) { // only splice array when item is found
+            arrayCopy.splice(i, 1); // 2nd parameter means remove one item only
+        }
+
+        setPhoneNumbers([...arrayCopy]);
+    };
+
+    const handleSaveInfo = () => {
+        const newMedicalCard = {
+            name: fullName,
+            specilty: specilty,
+            phoneNumbers: phoneNumbers,
+            address: {
+                street: street,
+                zip: zip,
+                city: city,
+                state: state,
+                country: country
+            },
+            email: email,
+            userID: localStorage.getItem("current_user_id")
+        }
+
+        saveInfo(newMedicalCard)
+    }
+
     return(
         <div className="medicalcard-create">
+            <h2>Add a new Medical Card</h2>
             <div className="medicalcard-block">
                 <div className="medicalcard-container">
-                    <input type="text" className="classic-input" value={""} placeholder="First Name"/>
-                    <input type="text" className="classic-input" placeholder="Last Name"/>
+                    <input type="text" className="classic-input" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Full Name"/>
+                    {/* <input type="text" className="classic-input" placeholder="Last Name"/> */}
                     <span className="column-space"></span>
-                    <input type="text" className="classic-input" placeholder="Specilty"/>
+                    <input type="text" className="classic-input" value={specilty} onChange={(e) => setSpecilty(e.target.value)} placeholder="Specilty"/>
                     <span className="column-space"></span>
-                    <div className="medicalcard-phone">
-                        <button>+</button>
-                        <input type="text" className="classic-input" placeholder="Phone Number"/>
+                    <div style={{width: "100%"}}>
+                        {
+                            phoneNumbers.map((e, i) => {
+                                return <PhoneNumberHandler phoneNumbers={phoneNumbers} handleRemoveItem={handleRemoveItem} setPhoneNumbers={setPhoneNumbers} i={i}/>
+                            })
+                        }
                     </div>
                     <span className="column-space"></span>
                     <div className="add-address">
                         <h3>Address:</h3>
-                        <input type="text" placeholder="Street" className="classic-input"/>
+                        <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="Street" className="classic-input"/>
                         <div>
-                            <input type="text" placeholder="Zip Code" className="classic-input"/>
+                            <input type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="Zip Code" className="classic-input"/>
                             <span></span>
-                            <input type="text" placeholder="City" className="classic-input"/>
+                            <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" className="classic-input"/>
                         </div>
-                        <input type="text" placeholder="State" className="classic-input"/>
-                        <input type="text" placeholder="Country" className="classic-input"/>
+                        <input type="text" value={state} onChange={(e) => setState(e.target.value)} placeholder="State" className="classic-input"/>
+                        <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Country" className="classic-input"/>
                     </div>
                     <span className="column-space"></span>
-                    <input type="text" className="classic-input" placeholder="Email"/>
+                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="classic-input" placeholder="Email"/>
                     <span className="column-space"></span>
-                    <button className="classic-button">Create</button>
+                    <button className="classic-button">Create Card</button>
                 </div>
             </div>
+        </div>
+    )
+}
+
+export function PhoneNumberHandler({phoneNumbers, setPhoneNumbers, handleRemoveItem, i}) {
+    const handlePhoneArray = (e) => {
+        const arrayClone = phoneNumbers
+        arrayClone[i] = e.target.value
+        setPhoneNumbers([...arrayClone])
+    }
+
+    return(
+        <div className="medicalcard-phone" style={{width: "100%"}}>
+            {i === 0 ? <button onClick={() => setPhoneNumbers([...phoneNumbers, ""])}>+</button>
+            : <button style={{background: "red"}} onClick={() => handleRemoveItem(i)}>-</button>}
+            <input type="text" value={phoneNumbers[i]} onChange={(e) => handlePhoneArray(e)} className="classic-input" placeholder="Phone Number"/>
         </div>
     )
 }
