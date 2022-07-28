@@ -100,3 +100,32 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Life & Health ${port}`)
 })
+
+app.post('/newMedicalCard', async (req, res) => {
+  try {
+    let MedicalCard = Parse.Object.extend("MedicalCard")
+    const newMedicalCard = new MedicalCard();
+
+    newMedicalCard.save(req.body)
+    res.status(201)
+    res.send(req.body)
+  }
+  catch{
+    console.log("Error")
+  }
+})
+
+app.post('/deleteMedicalCard/:mcId', async (req, res) => {
+  let medicalCard = new Parse.Object('Illnesses')
+  medicalCard.set('objectId', req.params.mcId)
+
+  try {
+    await medicalCard.destroy();
+    res.status(201)
+    res.send("Done!")
+  }
+  catch (error){
+    res.status(400)
+    res.send({"error" : "Failed to delete medical card: " + error })
+  }
+})

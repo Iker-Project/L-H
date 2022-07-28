@@ -1,7 +1,52 @@
 import React from 'react'
 import "./MedicalCards.css"
+import * as config from "../../config"
+import axios from "axios"
 
 export default function MedicalCards() {
+    const [medicalCards, setMedicalCards] = React.useState([])
+    const [addingMC, updateAddingMC] = React.useState(false)
+    const [deleteMode, updateDeleteMode] = React.useState(false)
+    const [mcSelected, updateMCSelected] = React.useState(null)
+
+    const [isLoading, setIsLoading] = React.useState(true)
+
+    const handleDeleteButton = ( async (id) => {
+        updateDeleteMode(!deleteMode)
+        updateMCSelected(null)
+
+        if (id){
+            axios.post(`${config.API_BASE_URL}/deleteMedicalCard/${id}`)
+            .then(res => {
+                console.log(res);
+            })
+            let newDataList = medicalCards.filter(mc => mc.objectId != id);
+            setIllnesses([...newDataList])
+        }
+    })
+
+    const saveInfo = (illnessObj) =>{
+        setIllnesses([...dataIllnesses, illnessObj])
+        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
+        .then(res => {
+            console.log(res);
+        })
+    }
+
+    React.useEffect(() => {
+        const fetchUserData = (async () => {
+            axios.get(`${config.API_BASE_URL}/app/${localStorage.getItem("current_user_id")}/medicalCards`)
+                .then(response => {
+                    console.log('res.data: ', response.data);
+                    setMedicalCards(response.data)
+                    setIsLoading(false)
+                })
+                .catch(error => {
+                    console.error("Error fetching: ", error)
+                })
+          })()
+    },[])
+
     return (
         <div className="medical-cards">
             <div className="title">
@@ -14,7 +59,11 @@ export default function MedicalCards() {
             <section className="rows">
                 <div className="first-row">
                     <button className="classic-button">Add new Medical Card</button>
-                    <MedicalCard/>
+                    {!isLoading ? medicalCards.map((medicalCards) => {
+                        return <MedicalCard key={medicalCards.objectId} medicalCards={medicalCards} updateAddingMC={updateAddingMC} updateMCSelected={updateMCSelected} deleteMode={deleteMode} handleDeleteButton={handleDeleteButton}/>
+                    })
+                    : <div className="fit-height"><h3>No Medical Cards registered.</h3></div>}
+
                 </div>
                 <span></span>
                 <div className="second-row">
@@ -25,7 +74,7 @@ export default function MedicalCards() {
     )
 }
 
-export function MedicalCard(){
+export function MedicalCard({medicalCards, updateAddingMC, updateMCSelected, deleteMode, handleDeleteButton}){
     return(
         <div className="medical-card">
             <div className="medicalcard-container">
@@ -33,8 +82,8 @@ export function MedicalCard(){
                     <img src="" alt="Medical Card Icon" className="card-icon"/>
                 </div>
                 <div>
-                    <p>Name</p>
-                    <span>Specilty</span>
+                    <p>{medicalCards.name}</p>
+                    <span>{medicalCards.specialty}</span>
                 </div>
             </div>
         </div>

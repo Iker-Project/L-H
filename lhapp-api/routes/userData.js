@@ -40,4 +40,16 @@ router.get('/:user/illnesses', async (req, res) => {
   }
 })
 
-  module.exports = router
+router.get('/:user/medicalCards', async (req, res) => {
+  try {
+    const userDataQuery = new Parse.Query("MedicalCard");
+    const userDataParse = await userDataQuery.equalTo('userID', req.params.user).findAll()
+
+    res.send(userDataParse)
+  } catch (error) {
+    res.status(400)
+    res.send({"error" : "Error getting user: " + error })
+  }
+})
+
+module.exports = router
