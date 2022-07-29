@@ -3,6 +3,7 @@ const router = express.Router()
 const {PARSE_APP_ID, PARSE_JAVASCRIPT_KEY} = require('../config')
 const Parse = require('parse/node')
 const NewUser = require('../models/user')
+var axios = require('axios');
 
 Parse.initialize(PARSE_APP_ID, PARSE_JAVASCRIPT_KEY)
 Parse.serverURL = "https://parseapi.back4app.com"
@@ -62,6 +63,33 @@ router.get('/:user/medicine', async (req, res) => {
     res.status(400)
     res.send({"error" : "Error getting user: " + error })
   }
+})
+
+const getHospitals = async (data) => {
+  var config = {
+      method: 'get',
+      url: `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${data.lat},${data.lng}&radius=${data.radius}&type=hospital&keyword=cruise&key=AIzaSyBZ-L6y4RM_Adga1qdKEj8ZTMCBkMHE_3o`,
+      headers : {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+      }
+  };
+
+  const results = axios(config)
+      .then(function (response) {
+      return response.data.results
+  })
+  .catch(function (error) {
+      console.log(error);
+  });
+
+  return results
+}
+
+router.post('/getHospitals', async (req, res) => {
+  const allHospitals = await getHospitals(req.body)
+  res.send(allHospitals).status(200)
 })
 
   module.exports = router

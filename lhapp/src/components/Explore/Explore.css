@@ -45,6 +45,7 @@
     background: white;
     border-radius: var(--border_radius);
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .phone-number {

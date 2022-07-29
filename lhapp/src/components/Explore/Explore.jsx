@@ -1,10 +1,36 @@
 import React from 'react'
 import "./Explore.css"
 import Dropdown from "../Inputs/Dropdown"
+import axios from "axios"
+import * as config from "../../config"
+import Geocode from "react-geocode";
 
 export default function Explore() {
-    const [exploreSelected, updateExploreSelected] = React.useState("Choose an option")
     const exploreOptions = ["Hospitals", "Doctors"]
+    const [exploreSelected, updateExploreSelected] = React.useState(exploreOptions[0])
+    const [radius, setRadius] = React.useState(100000)
+    const [hospitals, setHospitals] = React.useState(null)
+
+    const getHospitals = async (coords) => {
+        const list = await axios.post(`${config.API_BASE_URL}/app/getHospitals`, {...coords, radius})
+        setHospitals(list.data)
+        console.log(list)
+    }
+
+    React.useEffect(() => {
+        Geocode.setApiKey("AIzaSyBZ-L6y4RM_Adga1qdKEj8ZTMCBkMHE_3o");
+
+        if (navigator.geolocation) {
+	    	navigator.geolocation.getCurrentPosition(showPosition);
+	  	} else {
+	    	console.log("Geolocation is not supported by this browser.");
+	  	}
+
+        function showPosition(position) {
+            const coords = {lat: position.coords.latitude, lng: position.coords.longitude}
+            getHospitals(coords)
+        }
+    }, [])
 
     return (
         <div className="explore-view">
@@ -23,7 +49,14 @@ export default function Explore() {
             <section className="rows">
                 <div className="first-row">
                     <Dropdown data={exploreOptions} updateData={updateExploreSelected}/>
-                    <InfoContainer/>
+                    {
+                        {
+                            'Hospitals': hospitals && hospitals.map((hospital) => {
+                                return <InfoContainer key={hospital.place_id} data={hospital}/>
+                            }),
+                            'Doctors': ""
+                        }[exploreSelected]
+                    }
                 </div>
                 <span></span>
                 <div className="second-row">
@@ -34,12 +67,12 @@ export default function Explore() {
     )
 }
 
-export function InfoContainer(){
+export function InfoContainer({data}){
     return (
         <div className="explore-container">
             <div className="exploreinfo-block">
-                <p>Name</p>
-                <h3 className="subtitle">Address</h3>
+                <p>{data.name}</p>
+                <h3 className="subtitle">{data.vicinity}</h3>
             </div>
         </div>
     )
@@ -88,15 +121,15 @@ export function Filter(){
                 <form action="" className="filter-form">
                     <div>
                         <label className="input-container">
-                            <input type="radio" checked="checked" name="radio"/>
-                            <span class="checkmark"></span>
+                            <input type="radio" onChange={() => {}} checked="checked" name="radio"/>
+                            <span className="checkmark"></span>
                         </label>
                         <h3>Any</h3>
                     </div>
                     <div>
                         <label className="input-container">
                             <input type="radio" name="radio"/>
-                            <span class="checkmark"></span>
+                            <span className="checkmark"></span>
                         </label>
                         <h3>Specialties:</h3>
                     </div>
@@ -109,7 +142,7 @@ export function Filter(){
                     <div>
                         <label className="input-container">
                             <input type="radio" name="radio"/>
-                            <span class="checkmark"></span>
+                            <span className="checkmark"></span>
                         </label>
                         <h3>Illness:</h3>
                     </div>
