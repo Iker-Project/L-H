@@ -126,7 +126,7 @@ export function MedicalCardInformation({data}){
                     </div>
                     <div className="medicalcard-rowsection">
                         <img src="" alt="phone icon" className="icon"/>
-                        <p className="phone-number">{data.phoneNumbers[0]}</p>
+                        <p className="phone-number">{data.phoneNumbers.map((number) => {return `${number}, `})}</p>
                     </div>
                     <div className="medicalcard-address">
                         <h3>Address:</h3>
@@ -171,7 +171,7 @@ export function CreateMedicalCard({saveInfo}){
 
             const newMedicalCard = {
                 name: fullName,
-                specilty: specilty,
+                specialty: specilty,
                 phoneNumbers: phoneNumbers,
                 latitude: lat,
                 longitude: lng,
@@ -204,7 +204,7 @@ export function CreateMedicalCard({saveInfo}){
                     <div style={{width: "100%"}}>
                         {
                             phoneNumbers.map((e, i) => {
-                                return <PhoneNumberHandler phoneNumbers={phoneNumbers} handleRemoveItem={handleRemoveItem} setPhoneNumbers={setPhoneNumbers} i={i}/>
+                                return <PhoneNumberHandler key={i} phoneNumbers={phoneNumbers} handleRemoveItem={handleRemoveItem} setPhoneNumbers={setPhoneNumbers} i={i}/>
                             })
                         }
                     </div>
@@ -239,7 +239,7 @@ export function PhoneNumberHandler({phoneNumbers, setPhoneNumbers, handleRemoveI
 
     return(
         <div className="medicalcard-phone" style={{width: "100%"}}>
-            {i === 0 ? <button onClick={() => setPhoneNumbers([...phoneNumbers, ""])}>+</button>
+            {i === 0 ? i < 4 && <button onClick={() => setPhoneNumbers([...phoneNumbers, ""])}>+</button>
             : <button style={{background: "red"}} onClick={() => handleRemoveItem(i)}>-</button>}
             <input type="text" value={phoneNumbers[i]} onChange={(e) => handlePhoneArray(e)} className="classic-input" placeholder="Phone Number"/>
         </div>
