@@ -53,10 +53,12 @@
 }
 
 .schedule-container{
+    padding: 12px 0px;
     margin: 12px;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .logo-container {
@@ -69,6 +71,14 @@
 
 .logo-container img{
     width: inherit;
+}
+
+.schedule-container button{
+    border-style: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: red;
 }
 
 /* Schedule Information Window */

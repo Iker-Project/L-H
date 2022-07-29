@@ -33,7 +33,7 @@ export default function MedicalHistory({data, setData}) {
 
     const saveInfo = (illnessObj) =>{
         setIllnesses([...dataIllnesses, illnessObj])
-        axios.post(`${config.API_BASE_URL}/illnesses`, dataIllnesses)
+        axios.post(`${config.API_BASE_URL}/illnesses`, illnessObj)
         .then(res => {
             console.log(res);
         })
